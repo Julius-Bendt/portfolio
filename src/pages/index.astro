@@ -1,0 +1,43 @@
+---
+import Page from '../components/Page.astro';
+import StackItem from '../components/StackItem.astro';
+import {technologies} from "../consts";
+import ConnectItem from '../components/ConnectItem.astro';
+import AnimateableText from '../components/AnimateableText.astro';
+
+---
+<Page >
+	<section id="intro" class="grid md:grid-cols-3 md:gap-12 grid-flow-row ">
+		<img src="/assets/julius.jpg" alt="Picture of julius" class="rounded-full mx-auto outline outline-primary w-3/4 md:w-full mb-2 md:mb-0">
+	
+		<div class="flex flex-col justify-center md:col-span-2">
+			<h1 class="text-5xl font-bold mx-auto md:mx-0 text-center md:text-left">Hey there, I'm Julius Bendt!</h1>
+			<AnimateableText/>
+			<div class="flex flex-row gap-4 mt-4 md:mt-2 mx-auto md:mx-0">
+				<p class="hidden md:block" >Lets connect > </p>
+				<ConnectItem text="Github" icon="icons/github" fillColor="#ffffff" href="https://github.com/Julius-Bendt"/>
+				<ConnectItem text="Linkedin" icon="icons/linkedin" fillColor="#0A66C2" href="https://www.linkedin.com/in/julius-bendt/"/>
+				<ConnectItem text="Leetcode" icon="icons/leetcode" fillColor="#FFA116" href="https://leetcode.com/Julius-Bendt/"/>
+			</div>
+		</div>
+
+
+	</section>
+
+	<section id="description">
+		<h2 class="text-xl font-bold">About me</h2>
+		 My passion for software development started at a young age, and I have since dedicated myself to building my skills and knowledge in this field. I believe that software development is more than just writing code - it's about problem-solving and creating solutions that enhance the user experience.<br><br>
+		 One of my key strengths is my ability to work across the full stack. I'm equally comfortable working on the front-end and back-end of applications, allowing me to develop robust and scalable solutions. I have experience in several technologies, including C#, .NET, Laravel, Vue, Tailwind, and Flutter, and I'm constantly seeking to expand my knowledge and learn new tools and frameworks.
+	</section>
+
+	<section id="technologies">
+		<h2 class="text-xl font-bold">Technologies I work with</h2>
+		<p class="mb-2">These are the technologies I feel confident in working with on larger projects</p>
+		<div class="grid md:grid-cols-5 grid-cols-2 md:gap-8 gap-4 mx-auto"> 
+			{technologies.map((tech) => (
+				<StackItem name={tech.name} icon={tech.icon} fillColor={tech.fillColor}/>
+			))}
+		</div>
+		<p class="text-gray-400 text-sm">These awesome logos are provided by <a target="_blank" class="text-primary" href="https://simpleicons.org/"> SimpleIcons</a>.<br>All copyright and trademarks go to the respective owners</p>
+	</section>
+</Page>

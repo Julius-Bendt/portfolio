@@ -1,0 +1,26 @@
+---
+import SvgItem from './SvgItem.astro';
+export interface Props {
+	icon: string;
+    name: string;
+    fillColor:string;
+}
+
+const { icon,  name, fillColor = "#FF2D20", ...attributes } = Astro.props as Props;
+
+---
+
+  <div
+class="bg-bodyAccent p-3 rounded-md cursor-pointer group"
+>
+
+<div class="overflow-hidden aspect-video cursor-pointer rounded-t-md relative">
+<SvgItem
+class="icon h-auto w-2/5 mx-auto my-2 object-cover aspect-square group-hover:scale-125 transition duration-500 ease-in-out"
+    icon={`stack/${icon}`}
+    fillColor={fillColor}
+></SvgItem>
+</div>
+
+<p class="text-center">{ name }</p>
+</div>

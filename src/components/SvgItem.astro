@@ -1,0 +1,51 @@
+---
+import { parse } from 'node-html-parser';
+
+export interface Props {
+	icon: string;
+    fillColor:string;
+    svgClass:String|null|undefined;
+}
+
+function getSVG(name: string) {
+    // const publicDir = publicDir: new URL("./public", import.meta.url);
+  const filepath = `../../public/assets/${icon}.svg`;
+  console.log(filepath);
+  const files = import.meta.globEager<string>('../../public/assets/**/*.svg', {
+    as: 'raw',
+  });
+
+
+  if (!(filepath in files)) {
+    throw new Error(`${filepath} not found`);
+  }
+
+  const root = parse(files[filepath] as string);
+
+  const svg = root.querySelector('svg');
+  const { attributes, innerHTML } = svg;
+
+  return {
+    attributes,
+    innerHTML,
+  };
+}
+
+const { 
+    icon, 
+    fillColor,
+    svgClass = "icon h-auto w-2/5 mx-auto my-2 object-cover aspect-square group-hover:scale-125 transition duration-500 ease-in-out",
+    ...attributes 
+} = Astro.props as Props;
+
+const { attributes: baseAttributes, innerHTML } = getSVG(icon);
+
+const svgAttributes = { ...baseAttributes, ...attributes };
+---
+
+<svg
+class={svgClass}
+  {...svgAttributes}
+  set:html={innerHTML}
+  style={`fill:${fillColor}`}
+></svg>

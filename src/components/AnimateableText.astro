@@ -1,0 +1,62 @@
+
+<div class="flex flex-row gap-1 relative mt-1 mx-auto md:mx-0 w-full justify-center md:justify-start">
+    <p class="text-2xl">I'm a</p>
+    <!-- <div class="absolute inset-0 z-0 bg-red-500 border-l-2 border-primary border-solid animate-textAnimation box-border h-full w-full"></div> -->
+    <p class="text-2xl text-primary relative" id="animateableText"></p>
+</div>
+
+<script>
+    const animateableText = document.querySelector("#animateableText");
+
+    const delay = 5000; //ms
+    const texts = [
+        "fullstack developer",
+        "devOps engineer",
+        "dark mode entusiast"
+    ]
+
+
+    const animateText = () => {
+
+        if(animateableText == null)
+            return;
+
+        for(let i = 0; i < texts.length; i++)
+        {
+            setTimeout(() => {
+                animateableText.innerHTML = texts[i];
+            }, delay * i + 300);
+        }
+    };
+
+    animateText();
+    setInterval(animateText, texts.length * delay );
+
+</script>
+
+<style>
+    #animateableText::before {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #1f2022;
+  border-left: 2px solid #4070f4;
+  animation: textAnimation 5s steps(24) infinite;
+  animation-delay: 300ms;
+}
+
+@keyframes textAnimation{
+40%,60% {
+    left:100%;
+    
+}
+100% {
+    left:0%
+}
+}
+
+</style>
