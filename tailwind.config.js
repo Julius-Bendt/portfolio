@@ -8,7 +8,7 @@ export default {
     },
     extend: {
       colors: {
-        primary: "#6366f1",
+        primary: "#ffc107",
         body: "#1f2022",
         bodyAccent: "#242C3A",
         nav: "#23304b",
