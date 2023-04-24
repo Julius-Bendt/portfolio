@@ -1,0 +1,24 @@
+---
+import Page from '../components/common/Page.astro';
+import { portfolio } from '../consts';
+import PortfolioItem from '../components/portfolio/PortfolioItem.astro';
+
+
+---
+<Page >
+	<div class="flex flex-col">
+		<h1 class="text-3xl font-bold">Portfolio</h1>
+	<p class="mb-2">Here are the projects I have worked on, and some places I have worked at</p>
+	
+	<div class="grid md:grid-cols-3 grid-cols-1 gap-4">
+		{portfolio.map((item) => (
+			<PortfolioItem 
+			name={item.name}
+			description={item.description}
+			href={item.href}
+			image={item.image}
+			/>
+			))}
+	</div>
+	</div>
+</Page>

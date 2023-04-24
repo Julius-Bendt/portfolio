@@ -1,9 +1,25 @@
 ---
-import Page from '../components/Page.astro';
-import StackItem from '../components/StackItem.astro';
-import {technologies} from "../consts";
-import ConnectItem from '../components/ConnectItem.astro';
-import AnimateableText from '../components/AnimateableText.astro';
+import Page from '../components/common/Page.astro';
+
+import {techstacks} from "../consts";
+import ConnectItem from '../components/common/ConnectItem.astro';
+import AnimateableText from '../components/common/AnimateableText.astro';
+import StackItem from '../components/home/StackItem.astro';
+
+
+interface ITechstack {
+	name:string;
+	technologies: Array<any>
+}
+
+const techstack: ITechstack[] = [];
+for (const [name, technologies] of Object.entries(techstacks)) {
+
+  techstack.push({
+	"name":name,
+	"technologies":technologies,
+  });
+}
 
 ---
 <Page >
@@ -32,12 +48,20 @@ import AnimateableText from '../components/AnimateableText.astro';
 
 	<section id="technologies">
 		<h2 class="text-xl font-bold">Technologies I work with</h2>
-		<p class="mb-2">These are the technologies I feel confident in working with on larger projects</p>
-		<div class="grid md:grid-cols-5 grid-cols-2 md:gap-8 gap-4 mx-auto"> 
-			{technologies.map((tech) => (
+		<p class="mb-2">These are the technologies I feel confident in working with on larger projects.<br>These does not include all languages that I have worked with, though</p>
+
+
+		{techstack.map((techGroup) => (
+			<p class="text-xl mt-4 mb-1">{techGroup.name}</p>
+			<div class="grid md:grid-cols-6 grid-cols-2 md:gap-8 gap-4 mx-auto"> 
+			{techGroup.technologies.map((tech) => (
 				<StackItem name={tech.name} icon={tech.icon} fillColor={tech.fillColor}/>
-			))}
-		</div>
-		<p class="text-gray-400 text-sm">These awesome logos are provided by <a target="_blank" class="text-primary" href="https://simpleicons.org/"> SimpleIcons</a>.<br>All copyright and trademarks go to the respective owners</p>
+			))} 
+
+
+			</div>
+		))}
+
+		<p class="text-gray-400 text-sm mt-3">These awesome logos are provided by <a target="_blank" class="text-primary" href="https://simpleicons.org/"> SimpleIcons</a>.<br>All copyright and trademarks go to the respective owners</p>
 	</section>
 </Page>

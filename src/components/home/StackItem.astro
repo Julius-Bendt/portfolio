@@ -1,9 +1,9 @@
 ---
-import SvgItem from './SvgItem.astro';
+import SvgItem from '../common/SvgItem.astro';
 export interface Props {
 	icon: string;
-    name: string;
-    fillColor:string;
+  name: string;
+  fillColor:string;
 }
 
 const { icon,  name, fillColor = "#FF2D20", ...attributes } = Astro.props as Props;

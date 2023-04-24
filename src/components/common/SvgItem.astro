@@ -8,10 +8,10 @@ export interface Props {
 }
 
 function getSVG(name: string) {
-    // const publicDir = publicDir: new URL("./public", import.meta.url);
-  const filepath = `../../public/assets/${icon}.svg`;
+
+  const filepath = `../../../public/assets/${icon}.svg`;
   console.log(filepath);
-  const files = import.meta.globEager<string>('../../public/assets/**/*.svg', {
+  const files = import.meta.globEager<string>('../../../public/assets/**/*.svg', {
     as: 'raw',
   });
 

@@ -1,8 +1,8 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from './BaseHead.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 ---
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	</head>
 	<body class="bg-body text-gray-100">
         <div class="mx-auto min-h-screen overflow-x-hidden flex flex-col">
-		<!-- <Header title={SITE_TITLE} /> -->
+		<Header title={SITE_TITLE} />
 		<main class="my-4 flex gap-10 flex-col md:px-[8rem] px-[1rem]">
 			<slot />
 		</main>
