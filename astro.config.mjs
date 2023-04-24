@@ -13,7 +13,7 @@ export default defineConfig({
     mdx(),
     sitemap(),
     tailwind(),
-    compress(),
-    frontendistahtmlMinify(),
+    // compress(),
+    // frontendistahtmlMinify(),
   ],
 });
