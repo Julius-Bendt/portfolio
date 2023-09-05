@@ -5,18 +5,25 @@
     <p class="text-2xl text-primary relative" id="animateableText"></p>
 </div>
 
-<script>
-    const animateableText = document.querySelector("#animateableText");
+<script is:inline>
+    start();
 
-    const delay = 5000; //ms
-    const texts = [
-        "fullstack developer",
-        "devOps engineer",
-        "dark mode entusiast"
-    ]
+    
+    function start()
+    {
+        let animateableText = document.querySelector("#animateableText");
+        let delay = 5000; //ms
+        let texts = [
+            "fullstack developer",
+            "devOps engineer",
+            "dark mode enthusiast",
+        ]
 
-
-    const animateText = () => {
+        animateText(animateableText, delay, texts);
+        setInterval(animateText, delay * texts.length);
+    }    
+    
+    function animateText(animateableText, delay, texts) {
 
         if(animateableText == null)
             return;
@@ -29,8 +36,7 @@
         }
     };
 
-    animateText();
-    setInterval(animateText, texts.length * delay );
+
 
 </script>
 

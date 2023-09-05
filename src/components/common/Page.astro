@@ -3,12 +3,14 @@ import BaseHead from './BaseHead.astro';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { ViewTransitions } from 'astro:transitions';
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" transition:animate="morph">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<ViewTransitions />
 	</head>
 	<body class="bg-body text-gray-100">
         <div class="mx-auto min-h-screen overflow-x-hidden flex flex-col">

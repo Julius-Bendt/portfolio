@@ -90,7 +90,7 @@ export const portfolio = [
     {
         "name": "Stackflock",
         "description": "Stackflock's objective is to establish connections between developers and companies. It achieves this by providing a map-based interface that allows developers to locate companies within their geographical vicinity and filter them based on their technological stack.<br><br>This feature helps both developers and companies to gain insight into the growing technology trends within their locality.<br><br>The project is still work-in-progress",
-        "href": "https://stackflock.com",
+        "href": "https://stackflock.jub.dk",
         "image":"stackflock.webp"
     },
     {

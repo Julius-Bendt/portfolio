@@ -7,4 +7,7 @@ import tailwind from "@astrojs/tailwind";
 export default defineConfig({
   site: "https://juto.dk",
   integrations: [mdx(), sitemap(), tailwind()],
+  experimental: {
+    viewTransitions: true,
+  },
 });

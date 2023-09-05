@@ -15,3 +15,8 @@
 ::-webkit-scrollbar-track {
   background-color: #ecf0f1;
 }
+
+@font-face {
+  font-family: "Inter";
+  src: url("../public/assets/font/Inter-Regular.ttf");
+}

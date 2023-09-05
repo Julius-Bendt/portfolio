@@ -11,7 +11,7 @@ const { name, description, href, image} = Astro.props;
 ---
 
 <div class="bg-bodyAccent p-3 rounded-md flex flex-col gap-1">
-    <img alt={`image that shows ${name}`} class="rounded-md w-full h-[40vh] object-cover" src={`./assets/portfolio/${image}`} />
+    <img alt={`image that shows ${name}`} class="rounded-md w-full h-[40vh] object-cover" src={`/assets/portfolio/${image}`} />
     <h2 class="text-xl font-bold">{name}</h2>
     <p set:html={description}></p>
     {
