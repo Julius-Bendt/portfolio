@@ -9,6 +9,12 @@
 	public'''
 
 [[headers]]
+  for = "/*.html"
+  [headers.values]
+    Content-Encoding = "html"
+    Content-Type = "text/html"
+
+[[headers]]
   for = "/*.css"
   [headers.values]
     Content-Encoding = "gzip"
