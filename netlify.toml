@@ -4,8 +4,30 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
 
-    content-encoding: "gzip"
-    
 	cache-control = '''
 	max-age=1209600, # 14 days
 	public'''
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Content-Encoding = "gzip"
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Content-Encoding = "gzip"
+    Content-Type = "image/webp"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Content-Encoding = "gzip"
+    Content-Type = "image/jpeg"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Content-Encoding = "gzip"
+    Content-Type = "image/png"
