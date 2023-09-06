@@ -4,6 +4,8 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
 
+    content-encoding: gzip
+    
 	cache-control = '''
 	max-age=1209600, # 14 days
 	public'''
