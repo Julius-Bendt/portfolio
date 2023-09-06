@@ -2,8 +2,8 @@
   for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
-    Content-Encoding: gzip
-    Cache-Control: max-age=1209600; public
-    X-Content-Type-Options: nosniff
-    X-Frame-Options: SAMEORIGIN
-    X-XSS-Protection: 1; mode=block
+    Content-Encoding: "gzip"
+    Cache-Control: "max-age=1209600; public"
+    X-Content-Type-Options: "nosniff"
+    X-Frame-Options: "SAMEORIGIN"
+    X-XSS-Protection: "1; mode=block"

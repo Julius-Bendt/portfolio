@@ -19,4 +19,5 @@
 @font-face {
   font-family: "Inter";
   src: url("../../public/assets/font/Inter-Regular.ttf");
+  font-display: swap;
 }
