@@ -13,8 +13,20 @@ import { ViewTransitions } from "astro:transitions";
     <ViewTransitions />
     <script
       defer
-      data-domain="jub.db"
+      data-domain="jub.dk"
       src="https://jub.dk/js/script.pageview-props.tagged-events.js"></script>
+    <script>
+      // @ts-ignore
+      window.plausible =
+        // @ts-ignore
+        window.plausible ||
+        function () {
+          // @ts-ignore
+
+          (window.plausible.q = window.plausible.q || []).push(arguments);
+        };
+    </script>
+
     <script>
       // @ts-ignore
       window.plausible =
