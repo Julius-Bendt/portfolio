@@ -1,68 +1,159 @@
 ---
 import Page from '../components/common/Page.astro';
-
+import { Image } from 'astro:assets';
 import {techstacks} from "../consts";
 import ConnectItem from '../components/common/ConnectItem.astro';
 import AnimateableText from '../components/common/AnimateableText.astro';
 import StackItem from '../components/home/StackItem.astro';
-
+import CubesBackground from '../components/common/CubesBackground.astro';
 
 interface ITechstack {
-	name:string;
-	technologies: Array<any>
+	name: string;
+	technologies: Array<any>;
 }
 
-const techstack: ITechstack[] = [];
-for (const [name, technologies] of Object.entries(techstacks)) {
-
-  techstack.push({
-	"name":name,
-	"technologies":technologies,
-  });
-}
-
+const techstack: ITechstack[] = Object.entries(techstacks).map(([name, technologies]) => ({
+	name,
+	technologies,
+}));
 ---
-<Page >
-	<section id="intro" class="grid md:grid-cols-3 md:gap-12 grid-flow-row ">
-		<img src="/assets/julius.jpg" height="500" width="500" alt="Picture of julius" class="rounded-full mx-auto h-auto w-3/4 md:w-full mb-2 md:mb-0">
+
+
+<CubesBackground />
+<Page>
+	<section 
+		id="intro" 
+		class="grid md:grid-cols-3 md:gap-12 grid-flow-row animate-fadeIn"
+		aria-label="Introduction"
+	>
+		<div class="relative mx-auto md:mx-0 w-3/4 md:w-full">
+			<Image
+				src="/assets/julius.jpg"
+				alt="Portrait of Julius Bendt"
+				width={500}
+				height={500}
+				class="rounded-2xl w-full h-auto transition-transform duration-300 hover:scale-105"
+			/>
+		</div>
 	
 		<div class="flex flex-col justify-center md:col-span-2">
-			<h1 class="text-5xl font-bold mx-auto md:mx-0 text-center md:text-left">Hey there, I'm Julius Bendt!</h1>
+			<h1 class="text-5xl font-bold mx-auto md:mx-0 text-center md:text-left">
+				Hey there, I'm Julius H. Bendt!
+			</h1>
 			<AnimateableText />
-			<div class="flex flex-row  gap-4 mt-4 md:mt-2 mx-auto md:mx-0">
-				<p class="hidden md:block" >Lets connect > </p>
-				<ConnectItem class="" text="Github" icon="icons/github" fillColor="#ffffff" href="https://github.com/Julius-Bendt"/>
-				<ConnectItem class="" text="Linkedin" icon="icons/linkedin" fillColor="#0A66C2" href="https://www.linkedin.com/in/julius-bendt"/>
-				<ConnectItem class="" text="Leetcode" icon="icons/leetcode" fillColor="#FFA116" href="https://leetcode.com/Julius-Bendt"/>
-				<ConnectItem class="hidden md:block" text="Itch.io" icon="icons/itchdotio" fillColor="#FA5C5C" href="https://bukz.itch.io"/>
+			
+			<div class="flex flex-row flex-wrap gap-4 mt-4 md:mt-2 mx-auto md:mx-0">
+				<p class="hidden md:block my-auto">Let's connect > </p>
+				<ConnectItem 
+					text="Github" 
+					icon="icons/github" 
+					fillColor="#ffffff" 
+					href="https://github.com/Julius-Bendt"
+				/>
+				<ConnectItem 
+					text="Linkedin" 
+					icon="icons/linkedin" 
+					fillColor="#0A66C2" 
+					href="https://www.linkedin.com/in/julius-bendt"
+				/>
+				<ConnectItem 
+					text="Leetcode" 
+					icon="icons/leetcode" 
+					fillColor="#FFA116" 
+					href="https://leetcode.com/Julius-Bendt"
+				/>
+				<ConnectItem 
+					class="hidden md:block" 
+					text="Itch.io" 
+					icon="icons/itchdotio" 
+					fillColor="#FA5C5C" 
+					href="https://bukz.itch.io"
+				/>
 			</div>
 		</div>
-
-
 	</section>
 
-	<section id="description">
-		<h2 class="text-xl font-bold">About me</h2>
-		 My passion for software development started at a young age, and I have since dedicated myself to building my skills and knowledge in this field. I believe that software development is more than just writing code - it's about problem-solving and creating solutions that enhance the user experience.<br><br>
-		 One of my key strengths is my ability to work across the full stack. I'm equally comfortable working on the front-end and back-end of applications, allowing me to develop robust and scalable solutions. I have experience in several technologies, including C#, .NET, Laravel, Vue, Tailwind, and Flutter, and I'm constantly seeking to expand my knowledge and learn new tools and frameworks.
+	<section 
+		id="description"
+		class="my-16 animate-fadeIn animation-delay-300"
+		aria-label="About me"
+	>
+		<h2 class="text-2xl font-bold mb-4">About me</h2>
+		<div class="space-y-4 text-lg">
+			<p>
+				My passion for software development started at a young age, and I have since dedicated myself to building my skills and knowledge in this field. I believe that software development is more than just writing code - it's about problem-solving and creating solutions that enhance the user experience.
+			</p>
+			<p>
+				One of my key strengths is my ability to work across the full stack. I'm equally comfortable working on the front-end and back-end of applications, allowing me to develop robust and scalable solutions. I have experience in several technologies, including C#, .NET, Laravel, Vue, Tailwind, and Flutter, and I'm constantly seeking to expand my knowledge and learn new tools and frameworks.
+			</p>
+		</div>
 	</section>
 
-	<section id="technologies">
-		<h2 class="text-xl font-bold">Technologies I work with</h2>
-		<p class="mb-2">These are the technologies I feel confident in working with on larger projects.<br>These does not include all languages that I have worked with, though</p>
+	<section 
+		id="technologies"
+		class="animate-fadeIn animation-delay-600"
+		aria-label="Technologies"
+	>
+		<h2 class="text-2xl font-bold mb-4">Technologies I work with</h2>
+		<p class="mb-8 text-lg">
+			These are the technologies I feel confident in working with on larger projects. 
+			This is not an exhaustive list of all languages I've worked with.
+		</p>
 
-
-		{techstack.map((techGroup) => (
-			<p class="text-xl mt-4 mb-1">{techGroup.name}</p>
-			<div class="grid md:grid-cols-6 grid-cols-2 md:gap-8 gap-4 mx-auto"> 
-			{techGroup.technologies.map((tech) => (
-				<StackItem name={tech.name} icon={tech.icon} fillColor={tech.fillColor}/>
-			))} 
-
-
+		{techstack.map(({ name, technologies }) => (
+			<div class="mb-12">
+				<h3 class="text-xl font-semibold mb-4">{name}</h3>
+				<div class="grid md:grid-cols-6 grid-cols-2 md:gap-8 gap-4"> 
+					{technologies.map((tech) => (
+						<StackItem 
+							name={tech.name} 
+							icon={tech.icon} 
+							fillColor={tech.fillColor}
+						/>
+					))}
+				</div>
 			</div>
 		))}
 
-		<p class="text-gray-400 text-sm mt-3">These awesome logos are provided by <a target="_blank" class="text-primary" href="https://simpleicons.org/"> SimpleIcons</a>.<br>All copyright and trademarks go to the respective owners</p>
+		<p class="text-gray-400 text-sm mt-8">
+			These awesome logos are provided by 
+			<a 
+				target="_blank" 
+				class="text-primary hover:underline" 
+				href="https://simpleicons.org/"
+			>
+				SimpleIcons
+			</a>.
+			<br>
+			All copyright and trademarks belong to their respective owners.
+		</p>
 	</section>
 </Page>
+
+<style>
+
+
+.animate-fadeIn {
+	opacity: 0;
+	animation: fadeIn 1s ease-out forwards;
+}
+
+.animation-delay-300 {
+	animation-delay: 300ms;
+}
+
+.animation-delay-600 {
+	animation-delay: 600ms;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+</style>

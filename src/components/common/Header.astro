@@ -1,15 +1,177 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../../consts';
+
+// Single source of truth for navigation links
+const navigationLinks = [
+    { href: '/', text: 'Home' },
+    { href: '/portfolio', text: 'Portfolio' },
+    { href: '/work-experience', text: 'Work experience' }
+] as const;
 ---
 
-<header>
-	<nav class="bg-nav shadow py-4 rounded-b-md">
+<header role="banner" class="relative z-50">
+    <!-- Desktop Navigation - Top -->
+    <nav class="hidden md:flex bg-bodyAccent text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <span class="text-lg font-bold">
+                        Julius H. Bendt 💻
+                    </span>
+                </div>
 
-      <div class="flex gap-4 px-10 ">
-		<HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/portfolio">Portfolio</HeaderLink>
-      </div>
+                <!-- Desktop Navigation Links -->
+                <div class="flex items-center space-x-4">
+                    {navigationLinks.map(link => (
+                        <HeaderLink 
+                            href={link.href}
+                            class="group flex items-center p-4 hover:bg-gray-700 transition-all rounded-md"
+                        >
+                            <span>{link.text}</span>
+                        </HeaderLink>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </nav>
 
-  </nav>
+    <!-- Mobile Navigation - Bottom -->
+    <div class="md:hidden">
+        <!-- Mobile Menu Panel -->
+        <div 
+            id="mobileMenu" 
+            class="hidden fixed inset-x-0 bottom-0 text-white shadow-lg transform transition-all duration-300 ease-in-out opacity-0 translate-y-full z-[60]"
+        >
+            <div class="flex flex-col p-4 bg-bodyAccent rounded-t-lg">
+                {navigationLinks.map(link => (
+                    <HeaderLink 
+                        href={link.href}
+                        class="flex items-center p-4 hover:bg-gray-700 transition-all relative z-[60]"
+                    >
+                        <span>{link.text}</span>
+                    </HeaderLink>
+                ))}
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div 
+            id="menuOverlay"
+            class="hidden fixed inset-0 bg-navbar dark:bg-dark-navbar bg-opacity-95 dark:bg-opacity-95 z-[45]"
+        >
+        </div>
+
+        <!-- Mobile Navigation Background -->
+        <div class="fixed bottom-0 inset-x-0 h-20 bg-navbar dark:bg-dark-navbar shadow-lg z-40"></div>
+
+        <!-- Mobile Toggle Button -->
+        <button
+            id="menuButton"
+            class="fixed bottom-4 right-4 z-[80] p-4 rounded-2xl bg-primary dark:bg-primary-dark text-white hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-14 h-14 flex items-center justify-center"
+            aria-label="Toggle menu"
+        >
+            <div class="burger-icon w-6 flex flex-col items-end gap-1.5">
+                <span class="h-0.5 w-6 bg-white transform transition-all duration-300 ease-in-out rounded-full"></span>
+                <span class="h-0.5 w-6 bg-white transform transition-all duration-300 ease-in-out rounded-full"></span>
+                <span class="h-0.5 w-4 bg-white transform transition-all duration-300 ease-in-out rounded-full"></span>
+            </div>
+        </button>
+    </div>
 </header>
+
+<style>
+    /* Burger menu animation styles */
+    .burger-icon.active span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .burger-icon.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    .burger-icon.active span:nth-child(3) {
+        width: 24px;
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Mobile menu animation */
+    #mobileMenu.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    #mobileMenu.active :global(a) {
+        animation: slideIn 0.3s ease-out forwards;
+    }
+</style>
+
+<script>
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const burgerIcon = menuButton?.querySelector('.burger-icon');
+
+    if (menuButton && mobileMenu && menuOverlay && burgerIcon) {
+        let isOpen = false;
+
+        const toggleMenu = () => {
+            isOpen = !isOpen;
+            burgerIcon.classList.toggle('active');
+            
+            if (isOpen) {
+                mobileMenu.classList.remove('hidden');
+                menuOverlay.classList.remove('hidden');
+                mobileMenu.offsetHeight; // Force reflow
+                mobileMenu.classList.add('active');
+            } else {
+                mobileMenu.classList.remove('active');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                    menuOverlay.classList.add('hidden');
+                }, 300);
+            }
+        };
+
+        menuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (isOpen && !menuButton.contains(event.target as Node) && 
+                !mobileMenu.contains(event.target as Node)) {
+                toggleMenu();
+            }
+        });
+
+        // Handle resize events
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768 && isOpen) {
+                toggleMenu();
+            }
+        });
+
+        // Add click handlers for mobile menu items to close menu after navigation
+        const menuItems = mobileMenu.querySelectorAll('a');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                toggleMenu();
+            });
+        });
+    }
+</script>

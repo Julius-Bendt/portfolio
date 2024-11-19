@@ -1,6 +1,4 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.
 import '../../styles/global.css';
 
 export interface Props {
@@ -10,24 +8,24 @@ export interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-
 const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="shortcut icon" href="./favicon.ico" />
-<link rel="icon" href="./favicon.ico" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="icon" href="/favicon.ico" />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
-
-<!-- Primary Meta Tags -->
+<!-- SEO Metadata -->
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<meta name="author" content="Julius Bendt" />
+<meta name="keywords" content="fullstack developer, devops engineer, software engineer, web developer, Julius Bendt" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href={canonicalURL} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
@@ -42,3 +40,30 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Julius Bendt",
+  "url": "https://jub.dk",
+  "jobTitle": "Fullstack Developer",
+  "description": "Fullstack developer, DevOps engineer and dark mode enthusiast",
+  "sameAs": [
+    "https://github.com/Julius-Bendt",
+    "https://www.linkedin.com/in/julius-bendt",
+    "https://leetcode.com/Julius-Bendt",
+    "https://wip.dk",
+  ]
+}
+</script>
+
+<!-- Preload Fonts -->
+<link
+  rel="preload"
+  href="/assets/font/Inter-Regular.ttf"
+  as="font"
+  type="font/ttf"
+  crossorigin
+/>
