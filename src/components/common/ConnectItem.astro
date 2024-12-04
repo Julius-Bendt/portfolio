@@ -1,19 +1,12 @@
 ---
 import SvgItem from './SvgItem.astro';
 
-export interface Props {
-    /** The icon name to display */
-    icon: string;
-    /** The color to fill the icon with */
-    fillColor: string;
-    /** The text to display next to the icon */
-    text: string;
-    /** The URL to link to */
-    href: string;
-    /** Additional CSS classes (optional) */
-    class?: string;
-    /** aria-label for better accessibility (optional) */
-    ariaLabel?: string;
+import type { LinkProps } from '../../types/common';
+
+interface Props extends LinkProps {
+  icon: string;
+  fillColor: string;
+  text: string;
 }
 
 const { 

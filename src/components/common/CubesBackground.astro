@@ -81,6 +81,12 @@ class Shape {
     }
 
     update(scrollY: number) {
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            this.element.setAttribute("transform", `translate(${this.x} ${this.y})`);
+            return;
+        }
+
         if (this.isResetting) return;
 
         // Very slow upward movement

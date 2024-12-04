@@ -2,8 +2,12 @@
 title: "My First Blog Post"
 description: "This is my first blog post using Astro and Markdown"
 pubDate: "2024-12-03"
-heroImage: "test.jpg"
+heroImage: "blog/my-first-blog/celebration.jpg"
 heroAlt: "My First Blog Post"
+heroCredits:
+  author: "Jason Leung"
+  url: "https://unsplash.com/@ninjason"
+  source: "Unsplash"
 draft: false
 ---
 

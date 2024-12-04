@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { ImageProps } from '../../types/common';
+
+interface Props extends ImageProps {
+  format?: 'webp' | 'avif';
+  quality?: number;
+}
+
+const { src, alt } = Astro.props;
+
+// Import all images from assets directory
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}', { eager: true });
+
+// Function to get image path
+function getImagePath(src: string) {
+    // Handle absolute paths from src/assets
+    if (src.startsWith('/src/assets/')) {
+        return src;
+    }
+    // Handle paths without /src/assets prefix
+    if (src.startsWith('/')) {
+        return `/src/assets${src}`;
+    }
+    // Handle relative paths
+    return `/src/assets/${src}`;
+}
+
+const imagePath = getImagePath(src);
+const resolvedImage = images[imagePath]?.default;
+
+if (!resolvedImage) {
+    console.warn(`Image not found: ${imagePath}`);
+    console.warn('Available images:', Object.keys(images));
+}
+---
+{resolvedImage ? (
+  <Image
+    src={resolvedImage}
+    alt={alt}
+    width={800}
+    height={resolvedImage.height * (800 / resolvedImage.width)}
+    format="webp"
+    quality={80}
+    loading="lazy"
+    class="rounded-lg"
+    onerror="this.onerror=null;this.src='/assets/fallback-image.webp';"
+  />
+) : (
+  <div class="bg-gray-800 rounded-lg p-4 text-center">
+    <span class="text-gray-400">Image not available</span>
+  </div>
+)}

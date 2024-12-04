@@ -12,9 +12,13 @@ const blog = defineCollection({
             .or(z.date())
             .transform((val) => new Date(val))
             .optional(),
-        // Instead of a string, we'll store the image path relative to src/assets
-        heroImage: z.string().optional(), // e.g., "test.jpg" or "blog/my-post/test2.jpg"
+        heroImage: z.string().optional(),
         heroAlt: z.string().optional(),
+        heroCredits: z.object({
+            author: z.string(),
+            url: z.string().url(),
+            source: z.string().default('Unsplash')
+        }).optional(),
         keywords: z.array(z.string()).default([
             "fullstack developer",
             "devops engineer",

@@ -3,57 +3,14 @@ import type { CollectionEntry } from 'astro:content';
 import Page from '../components/common/Page.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-
-interface ImageModule {
-    default: ImageMetadata;
-}
-
-// Import all images from assets directory
-const images = import.meta.glob<ImageModule>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}', { eager: true });
-
-
-interface ContentImage {
-    src: string;
-    alt: string;
-    loading?: 'lazy' | 'eager';
-    width?: number;
-    height?: number;
-}
-
-// Helper function to get image metadata
-function getImageData(src: string): ImageMetadata | null {
-    const imagePath = `/src/assets/${src}`;
-    return images[imagePath]?.default || null;
-}
-
-// Process markdown content with proper typing
-function processMarkdownImages(content: string): string {
-    return content.replace(
-        /!\[(.*?)\]\((.*?)\)/g,
-        (match: string, alt: string, src: string): string => {
-            if (src.startsWith('http')) return match;
-            
-            const imageData = getImageData(src);
-            if (!imageData) {
-                console.warn(`Image not found: ${src}`);
-                return match;
-            }
-
-            const image: ContentImage = {
-                src: imageData.src,
-                alt,
-                loading: 'lazy',
-                width: 800
-            };
-
-            return `<img src="${image.src}" alt="${image.alt}" loading="${image.loading}" width="${image.width}" />`;
-        }
-    );
-}
+import BlogImage from '../components/blog/BlogImage.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, heroAlt, keywords } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, heroAlt, heroCredits, keywords } = Astro.props;
+
+// Import all images from assets directory
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}', { eager: true });
 
 function formatDate(date: Date) {
     return date.toLocaleDateString('en-GB', {
@@ -63,24 +20,20 @@ function formatDate(date: Date) {
     });
 }
 
-// Get the image path based on heroImage or fall back to default
-const imagePath = heroImage 
-    ? `/src/assets/${heroImage}` 
-    : '/src/assets/julius.jpg';
-
-// Get the actual image from our glob
-const selectedImage = images[imagePath]?.default;
-
-if (!selectedImage) {
-    console.error(`Image not found: ${imagePath}`);
-}
-
 const formattedPublishDate = formatDate(pubDate);
 const formattedUpdateDate = updatedDate ? formatDate(updatedDate) : null;
 
-// Create the full URL for metadata
-const optimizedImageSrc = selectedImage?.src;
-const imageUrl = optimizedImageSrc ? new URL(optimizedImageSrc, Astro.site).toString() : undefined;
+// Get hero image path
+const heroImagePath = heroImage ? `/src/assets/${heroImage}` : '/src/assets/julius.jpg';
+const resolvedHeroImage = images[heroImagePath]?.default;
+
+// Create SEO image URL
+const seoImagePath = heroImage || 'julius.jpg';
+
+// Define custom components for markdown
+export const components = {
+    img: BlogImage
+};
 ---
 
 <Page
@@ -89,21 +42,46 @@ const imageUrl = optimizedImageSrc ? new URL(optimizedImageSrc, Astro.site).toSt
     type="article"
     publishedDate={pubDate}
     modifiedDate={updatedDate}
-    image={imageUrl}
+    image={seoImagePath}
     keywords={keywords}
 >
-    <article class="prose prose-invert mx-auto max-w-3xl">
-        <div class="mb-8">
-            {selectedImage && (
-                <Image 
-                    src={selectedImage}
-                    alt={heroAlt || `Hero image for ${title}`}
-                    width={1200}
-                    height={630}
-                    format="webp"
-                    quality={80}
-                    class="rounded-xl w-full"
-                />
+    <article class="prose prose-invert mx-auto max-w-4xl mt-8">
+        <div class="mb-8 relative">
+            {resolvedHeroImage && (
+                <>
+                    <Image 
+                        src={resolvedHeroImage} 
+                        alt={heroAlt || `Hero image for ${title}`}
+                        width={1200}
+                        height={400}
+                        format="webp"
+                        quality={80}
+                        class="rounded-xl w-full h-[300px] object-cover"
+                        loading="eager"
+                    />
+                    {heroCredits && (
+                        <div class="absolute bottom-2 right-2 bg-black/70 px-3 py-1 rounded-full text-sm">
+                            Photo by{' '}
+                            <a 
+                                href={heroCredits.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-primary hover:underline"
+                            >
+                                {heroCredits.author}
+                            </a>
+                            {' '}on{' '}
+                            <a 
+                                href={`https://${heroCredits.source.toLowerCase()}.com`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-primary hover:underline"
+                            >
+                                {heroCredits.source}
+                            </a>
+                        </div>
+                    )}
+                </>
             )}
         </div>
         <div class="mb-8">

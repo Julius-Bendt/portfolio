@@ -1,10 +1,10 @@
 ---
 import { SITE_TITLE } from '../../consts';
-import type { SEOMetadata } from '../../types/seo';
 import { generateSchemaOrg } from '../../utils/seoSchema';
 import defaultOgImage from '../../assets/julius.jpg';  // Import the default image
+import type { SEOProps } from '../../types/common';
 
-export interface Props extends SEOMetadata {}
+export interface Props extends SEOProps {}
 
 const { 
     title, 
@@ -40,6 +40,10 @@ const schemaOrg = generateSchemaOrg({
 <link rel="icon" href="/favicon.ico" />
 <meta name="generator" content={Astro.generator} />
 
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<link rel="preconnect" href="https://analytics.wip.dk" />
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+
 <!-- Primary Meta Tags -->
 <title>{fullTitle}</title>
 <meta name="title" content={fullTitle} />
@@ -50,14 +54,19 @@ const schemaOrg = generateSchemaOrg({
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Open Graph / Facebook -->
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content="en_US" />
 <meta property="og:type" content={type} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={imageUrl} />
+<meta property="og:image:alt" content={`Image for ${fullTitle}`} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
+<!-- <meta property="twitter:site" content="@juliusbendt" /> -->
+<!-- <meta property="twitter:creator" content="@juliusbendt" /> -->
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={fullTitle} />
 <meta property="twitter:description" content={description} />

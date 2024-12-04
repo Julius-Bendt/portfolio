@@ -1,13 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 
-export interface Props {
-    image: string;
-    name: string;
-    description: string;
-    href: string | null;
-    status?: 'completed' | 'in-progress' | 'archived';
-}
+import type { PortfolioItemProps } from '../../types/common';
+export interface Props extends PortfolioItemProps {}
 
 const { name, description, href, image, status = 'completed' } = Astro.props;
 
