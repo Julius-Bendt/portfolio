@@ -44,7 +44,7 @@ console.log(greeting);
 
 You can [link to other pages (this redirects to 'home')](/)
 
-![Alt text for images](./images/graitor.png)
+![Alt text for images](./images/celebration.jpg)
 
 ## Blockquotes
 
