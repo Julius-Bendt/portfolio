@@ -20,7 +20,10 @@ const techstack: ITechstack[] = Object.entries(techstacks).map(([name, technolog
 
 
 <CubesBackground />
-<Page>
+<Page
+    title="Home"
+    description="Julius Bendt - Fullstack developer, DevOps engineer, and home automation enthusiast. Explore my portfolio and technical expertise."
+>
 	<section 
 		id="intro" 
 		class="grid md:grid-cols-3 md:gap-12 grid-flow-row animate-fadeIn"
@@ -75,17 +78,24 @@ const techstack: ITechstack[] = Object.entries(techstacks).map(([name, technolog
 
 	<section 
 		id="description"
-		class="my-16 animate-fadeIn animation-delay-300"
+		class="animate-fadeIn animation-delay-300"
 		aria-label="About me"
 	>
-		<h2 class="text-2xl font-bold mb-4">About me</h2>
-		<div class="space-y-4 text-lg">
+		<h2 class="text-2xl font-bold mb-2">About me</h2>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 			<p>
-				My passion for software development started at a young age, and I have since dedicated myself to building my skills and knowledge in this field. I believe that software development is more than just writing code - it's about problem-solving and creating solutions that enhance the user experience.
+				👋 Hello! I'm Julius Bendt, a fullstack developer who enjoys turning complex problems into elegant solutions. I bridge the gap between technical expertise and clear communication, making sure everyone - from developers to stakeholders - is on the same page.
 			</p>
 			<p>
-				One of my key strengths is my ability to work across the full stack. I'm equally comfortable working on the front-end and back-end of applications, allowing me to develop robust and scalable solutions. I have experience in several technologies, including C#, .NET, Laravel, Vue, Tailwind, and Flutter, and I'm constantly seeking to expand my knowledge and learn new tools and frameworks.
+				💻 My technical journey covers everything from crafting robust backends with .NET and Laravel to building smooth user experiences with Vue and TypeScript. I enjoy working across the entire stack, including mobile development with Flutter and infrastructure management with Terraform.
 			</p>
+			<p>
+				⚡ When I'm not coding professionally, you'll find me exploring the intersection of technology and daily life through home automation projects, managing my homelab setup, or building SaaS products. I'm also an avid boulderer, proving that problem-solving isn't limited to the digital realm!
+			</p>
+			<p>
+				🔧 My tech adventures are driven by a simple philosophy: <b>great software is about creating solutions that make a real difference</b>, whether it's optimizing database queries with PostgreSQL or crafting seamless user experiences with Tailwind.
+			</p>
+
 		</div>
 	</section>
 
@@ -94,10 +104,9 @@ const techstack: ITechstack[] = Object.entries(techstacks).map(([name, technolog
 		class="animate-fadeIn animation-delay-600"
 		aria-label="Technologies"
 	>
-		<h2 class="text-2xl font-bold mb-4">Technologies I work with</h2>
+		<h2 class="text-2xl font-bold mb-2">Technologies I work with</h2>
 		<p class="mb-8 text-lg">
-			These are the technologies I feel confident in working with on larger projects. 
-			This is not an exhaustive list of all languages I've worked with.
+			These are the technologies I have worked with on project - some work related, other as a hobby. 
 		</p>
 
 		{techstack.map(({ name, technologies }) => (

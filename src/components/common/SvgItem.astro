@@ -10,7 +10,8 @@ export interface Props {
 async function getSVG(icon: string) {
     const files = import.meta.glob('/public/assets/**/*.svg', {
         eager: true,
-        as: 'raw'
+        query: '?raw',
+        import: 'default'
     });
 
     const filepath = `/public/assets/${icon}.svg`;

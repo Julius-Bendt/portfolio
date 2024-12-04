@@ -1,0 +1,124 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Page from '../components/common/Page.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface ImageModule {
+    default: ImageMetadata;
+}
+
+// Import all images from assets directory
+const images = import.meta.glob<ImageModule>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}', { eager: true });
+
+
+interface ContentImage {
+    src: string;
+    alt: string;
+    loading?: 'lazy' | 'eager';
+    width?: number;
+    height?: number;
+}
+
+// Helper function to get image metadata
+function getImageData(src: string): ImageMetadata | null {
+    const imagePath = `/src/assets/${src}`;
+    return images[imagePath]?.default || null;
+}
+
+// Process markdown content with proper typing
+function processMarkdownImages(content: string): string {
+    return content.replace(
+        /!\[(.*?)\]\((.*?)\)/g,
+        (match: string, alt: string, src: string): string => {
+            if (src.startsWith('http')) return match;
+            
+            const imageData = getImageData(src);
+            if (!imageData) {
+                console.warn(`Image not found: ${src}`);
+                return match;
+            }
+
+            const image: ContentImage = {
+                src: imageData.src,
+                alt,
+                loading: 'lazy',
+                width: 800
+            };
+
+            return `<img src="${image.src}" alt="${image.alt}" loading="${image.loading}" width="${image.width}" />`;
+        }
+    );
+}
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, pubDate, updatedDate, heroImage, heroAlt, keywords } = Astro.props;
+
+function formatDate(date: Date) {
+    return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+}
+
+// Get the image path based on heroImage or fall back to default
+const imagePath = heroImage 
+    ? `/src/assets/${heroImage}` 
+    : '/src/assets/julius.jpg';
+
+// Get the actual image from our glob
+const selectedImage = images[imagePath]?.default;
+
+if (!selectedImage) {
+    console.error(`Image not found: ${imagePath}`);
+}
+
+const formattedPublishDate = formatDate(pubDate);
+const formattedUpdateDate = updatedDate ? formatDate(updatedDate) : null;
+
+// Create the full URL for metadata
+const optimizedImageSrc = selectedImage?.src;
+const imageUrl = optimizedImageSrc ? new URL(optimizedImageSrc, Astro.site).toString() : undefined;
+---
+
+<Page
+    title={title}
+    description={description}
+    type="article"
+    publishedDate={pubDate}
+    modifiedDate={updatedDate}
+    image={imageUrl}
+    keywords={keywords}
+>
+    <article class="prose prose-invert mx-auto max-w-3xl">
+        <div class="mb-8">
+            {selectedImage && (
+                <Image 
+                    src={selectedImage}
+                    alt={heroAlt || `Hero image for ${title}`}
+                    width={1200}
+                    height={630}
+                    format="webp"
+                    quality={80}
+                    class="rounded-xl w-full"
+                />
+            )}
+        </div>
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-4">{title}</h1>
+            <div class="text-gray-400">
+                <time>{formattedPublishDate}</time>
+                {formattedUpdateDate && (
+                    <div class="italic">
+                        Last updated on <time>{formattedUpdateDate}</time>
+                    </div>
+                )}
+            </div>
+        </div>
+        <div class="prose prose-invert prose-lg">
+            <slot />
+        </div>
+    </article>
+</Page>

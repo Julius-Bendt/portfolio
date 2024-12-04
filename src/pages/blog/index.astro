@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import Page from '../../components/common/Page.astro';
+import { Image } from 'astro:assets';
+
+// Import all images from assets directory
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/**/*.{jpeg,jpg,png,gif,webp}', { eager: true });
+
+const posts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+});
+
+posts.sort((a, b) => {
+    const dateA = new Date(a.data.pubDate);
+    const dateB = new Date(b.data.pubDate);
+    return dateB.getTime() - dateA.getTime();
+});
+
+const formatDate = (date: Date | string) => {
+    const d = new Date(date);
+    return d.toLocaleDateString('en-us', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+};
+
+// Helper function to get image for a post
+function getPostImage(heroImage: string | undefined) {
+    if (!heroImage) return null;
+    const imagePath = `/src/assets/${heroImage}`;
+    return images[imagePath]?.default;
+}
+---
+
+<Page
+    title="Blog"
+    description="Technical insights, development experiences, and thoughts on software engineering, DevOps, and web development."
+>
+    <section class="max-w-6xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8">Blog</h1>
+        <div class="grid md:grid-cols-2 gap-8">
+            {posts.map((post) => {
+                const postImage = getPostImage(post.data.heroImage);
+                return (
+                    <article class="bg-bodyAccent rounded-xl overflow-hidden hover:transform hover:-translate-y-1 transition-all duration-300">
+                        <a href={`/blog/${post.slug}`}>
+                            {postImage && (
+                                <Image
+                                    src={postImage}
+                                    alt={post.data.heroAlt || `Hero image for ${post.data.title}`}
+                                    width={600}
+                                    height={300}
+                                    format="webp"
+                                    quality={60}
+                                    class="w-full h-48 object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            )}
+                            <div class="p-6">
+                                <h2 class="text-2xl font-bold mb-2 text-primary">
+                                    {post.data.title}
+                                </h2>
+                                <div class="text-gray-400 mb-4">
+                                    <time>{formatDate(post.data.pubDate)}</time>
+                                </div>
+                                <p class="text-gray-300">
+                                    {post.data.description}
+                                </p>
+                            </div>
+                        </a>
+                    </article>
+                );
+            })}
+        </div>
+    </section>
+</Page>

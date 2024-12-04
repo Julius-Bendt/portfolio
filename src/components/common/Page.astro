@@ -2,49 +2,42 @@
 import BaseHead from "./BaseHead.astro";
 import Header from "./Header.astro";
 import Footer from "./Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
-import { ViewTransitions } from "astro:transitions";
+import type { SEOMetadata } from "../../types/seo";
+
+interface Props extends SEOMetadata {
+    class?: string;
+}
+
+const { class: className, ...seoMetadata } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="dark" transition:animate="morph">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <ViewTransitions />
-    <script
-      defer
-      data-domain="jub.dk"
-      src="https://jub.dk/js/script.pageview-props.tagged-events.js"></script>
-    <script>
-      // @ts-ignore
-      window.plausible =
-        // @ts-ignore
-        window.plausible ||
-        function () {
-          // @ts-ignore
-
-          (window.plausible.q = window.plausible.q || []).push(arguments);
-        };
-    </script>
-
-    <script>
-      // @ts-ignore
-      window.plausible =
-        // @ts-ignore
-        window.plausible ||
-        function () {
-          // @ts-ignore
-          (window.plausible.q = window.plausible.q || []).push(arguments);
-        };
-    </script>
-  </head>
-  <body class="bg-body text-gray-100">
-    <div class="mx-auto min-h-screen overflow-x-hidden flex flex-col">
-      <Header title={SITE_TITLE} />
-      <main class="my-4 flex gap-10 flex-col md:px-[8rem] px-[1rem]">
-        <slot />
-      </main>
-      <Footer />
-    </div>
-  </body>
+<html lang="en" class="dark">
+    <head>
+        <BaseHead {...seoMetadata} />
+        <script
+            defer
+            data-domain="jub.dk"
+            src="https://jub.dk/js/script.pageview-props.tagged-events.js"
+        ></script>
+        <script>
+            // @ts-ignore
+            window.plausible =
+                // @ts-ignore
+                window.plausible ||
+                function () {
+                    // @ts-ignore
+                    (window.plausible.q = window.plausible.q || []).push(arguments);
+                };
+        </script>
+    </head>
+    <body class="bg-body text-gray-100">
+        <div class:list={["mx-auto min-h-screen overflow-x-hidden flex flex-col", className]}>
+            <Header />
+            <main class="my-4 flex gap-10 flex-col md:px-[8rem] px-[1rem]">
+                <slot />
+            </main>
+            <Footer />
+        </div>
+    </body>
 </html>

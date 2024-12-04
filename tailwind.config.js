@@ -1,3 +1,4 @@
+// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: "class",
@@ -16,6 +17,27 @@ export default {
         warning: "#F59E0B",
         info: "#3B82F6",
         error: "#EF4444",
+      },
+      typography: {
+        invert: {
+          css: {
+            "--tw-prose-body": "#fff",
+            "--tw-prose-headings": "#fff",
+            "--tw-prose-links": "#ffc107",
+            "--tw-prose-bold": "#fff",
+            "--tw-prose-counters": "#9ca3af",
+            "--tw-prose-bullets": "#4b5563",
+            "--tw-prose-hr": "#374151",
+            "--tw-prose-quotes": "#9ca3af",
+            "--tw-prose-quote-borders": "#374151",
+            "--tw-prose-captions": "#9ca3af",
+            "--tw-prose-code": "#fff",
+            "--tw-prose-pre-code": "#fff",
+            "--tw-prose-pre-bg": "#1f2937",
+            "--tw-prose-th-borders": "#374151",
+            "--tw-prose-td-borders": "#374151",
+          },
+        },
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-out",
@@ -45,5 +67,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
