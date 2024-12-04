@@ -1,0 +1,166 @@
+---
+{/* Your imports */}
+---
+
+<div id="background-container" class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index: -1;">
+    <svg id="background-svg" width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+        <!-- Shapes will be added here -->
+    </svg>
+</div>
+
+<script>
+console.log("Script starting...");
+
+class Shape {
+    element: SVGElement;
+    x: number;
+    y: number;
+    rotation: number;
+    rotationSpeed: number;
+    moveSpeed: number;
+    size: number;
+    originalY: number;
+    opacity: number;
+    isResetting: boolean;
+
+    constructor(svg: SVGSVGElement, index: number, startAtBottom = false) {
+        this.size = Math.random() * 20 + 20;
+        this.element = this.createCube();
+        svg.appendChild(this.element);
+        
+        // Initial position
+        this.x = Math.random() * window.innerWidth;
+        if (startAtBottom) {
+            // Start new shapes at the bottom
+            this.y = window.innerHeight + this.size;
+        } else {
+            // Initial distribution for startup
+            const section = window.innerHeight / 5;
+            this.y = (index * section) + (Math.random() * section);
+        }
+        
+        this.originalY = this.y;
+        this.rotation = Math.random() * 360;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+        this.moveSpeed = Math.random() * 0.05 + 0.02;
+        this.opacity = 0.2;
+        this.isResetting = false;
+        
+        this.element.style.fill = 'currentColor';
+        this.element.style.opacity = this.opacity.toString();
+        this.element.style.transition = 'opacity 1s ease-in-out';
+        
+        this.update(0);
+    }
+
+    createCube(): SVGElement {
+        const cube = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        cube.setAttribute("width", this.size.toString());
+        cube.setAttribute("height", this.size.toString());
+        cube.setAttribute("rx", (this.size * 0.3).toString());
+        return cube;
+    }
+
+    reset() {
+        // Start fade out
+        this.isResetting = true;
+        this.element.style.opacity = "0";
+        
+        // After fade out, reset position
+        setTimeout(() => {
+            this.y = window.innerHeight + this.size;
+            this.x = Math.random() * window.innerWidth;
+            this.originalY = this.y;
+            this.isResetting = false;
+            
+            // Fade back in after position reset
+            setTimeout(() => {
+                this.element.style.opacity = this.opacity.toString();
+            }, 100);
+        }, 1000);
+    }
+
+    update(scrollY: number) {
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            this.element.setAttribute("transform", `translate(${this.x} ${this.y})`);
+            return;
+        }
+
+        if (this.isResetting) return;
+
+        // Very slow upward movement
+        this.y -= this.moveSpeed;
+        this.rotation += this.rotationSpeed;
+
+        // Start reset when shape is near the top
+        if (this.y + this.size < 100 && !this.isResetting) {
+            this.reset();
+            return;
+        }
+
+        const scrollProgress = scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+        const parallaxY = scrollY * 0.15;
+        const scrollEffect = Math.sin(scrollProgress * Math.PI * 2) * 20;
+
+        const finalY = this.y + parallaxY + scrollEffect;
+        const finalX = this.x + Math.sin(scrollProgress * Math.PI * 2 + this.x) * 5;
+
+        this.element.setAttribute("transform", `
+            translate(${finalX} ${finalY}) 
+            rotate(${this.rotation} ${this.size/2} ${this.size/2})
+        `);
+    }
+}
+
+function initBackground() {
+const svgElement = document.getElementById('background-svg');
+    if (!svgElement || !(svgElement instanceof SVGSVGElement)) {
+        console.error("SVG element not found or is not an SVGSVGElement!");
+        return;
+    }
+    
+    const numberOfShapes = 40;
+    const shapes = Array.from({ length: numberOfShapes }, (_, i) => new Shape(svgElement as SVGSVGElement, i));
+    
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function animate() {
+        shapes.forEach(shape => shape.update(lastScrollY));
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('scroll', () => {
+        lastScrollY = window.scrollY;
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                shapes.forEach(shape => shape.update(lastScrollY));
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+
+    animate();
+}
+
+// Run initialization when the document is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBackground);
+} else {
+    initBackground();
+}
+</script>
+
+<style is:global>
+    #background-svg rect {
+        fill: var(--color-primary);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        #background-svg rect {
+            fill: var(--color-primary-dark, var(--color-primary));
+        }
+    }
+</style>

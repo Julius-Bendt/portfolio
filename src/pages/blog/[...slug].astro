@@ -1,0 +1,37 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { getFileDates } from '../../utils/gitDates';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog', ({ data }) => {
+        return import.meta.env.PROD ? !data.draft : true;
+    });
+    
+    return posts.map((post) => {
+        const dates = getFileDates(`src/content/blog/${post.id}`);
+        
+        const postWithDates = {
+            ...post,
+            data: {
+                ...post.data,
+                pubDate: post.data.pubDate || dates.created,
+                updatedDate: post.data.updatedDate || dates.modified
+            }
+        };
+        
+        return {
+            params: { slug: post.slug },
+            props: postWithDates,
+        };
+    });
+}
+
+type Props = CollectionEntry<'blog'>;
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<BlogPost {...post.data}>
+    <Content />
+</BlogPost>

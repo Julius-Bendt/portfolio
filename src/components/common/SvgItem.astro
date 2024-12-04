@@ -2,33 +2,37 @@
 import { parse } from 'node-html-parser';
 
 export interface Props {
-	icon: string;
-    fillColor:string;
-    svgClass:String|null|undefined;
+    icon: string;
+    fillColor: string;
+    svgClass?: string;
 }
 
-function getSVG(name: string) {
+async function getSVG(icon: string) {
+    const files = import.meta.glob('/public/assets/**/*.svg', {
+        eager: true,
+        query: '?raw',
+        import: 'default'
+    });
 
-  const filepath = `../../../public/assets/${icon}.svg`;
-  console.log(filepath);
-  const files = import.meta.globEager<string>('../../../public/assets/**/*.svg', {
-    as: 'raw',
-  });
+    const filepath = `/public/assets/${icon}.svg`;
+    
+    if (!(filepath in files)) {
+        throw new Error(`${filepath} not found`);
+    }
 
+    const root = parse(files[filepath] as string);
+    const svg = root.querySelector('svg');
+    
+    if (!svg) {
+        throw new Error(`No SVG element found in ${filepath}`);
+    }
 
-  if (!(filepath in files)) {
-    throw new Error(`${filepath} not found`);
-  }
+    const { attributes, innerHTML } = svg;
 
-  const root = parse(files[filepath] as string);
-
-  const svg = root.querySelector('svg');
-  const { attributes, innerHTML } = svg;
-
-  return {
-    attributes,
-    innerHTML,
-  };
+    return {
+        attributes,
+        innerHTML,
+    };
 }
 
 const { 
@@ -38,14 +42,13 @@ const {
     ...attributes 
 } = Astro.props as Props;
 
-const { attributes: baseAttributes, innerHTML } = getSVG(icon);
-
+const { attributes: baseAttributes, innerHTML } = await getSVG(icon);
 const svgAttributes = { ...baseAttributes, ...attributes };
 ---
 
 <svg
-class={svgClass}
-  {...svgAttributes}
-  set:html={innerHTML}
-  style={`fill:${fillColor}`}
-></svg>
+    class={svgClass}
+    {...svgAttributes}
+    set:html={innerHTML}
+    style={`fill:${fillColor}`}
+/>

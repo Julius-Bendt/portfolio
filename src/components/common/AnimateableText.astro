@@ -1,68 +1,97 @@
-
 <div class="flex flex-row gap-1 relative mt-1 mx-auto md:mx-0 w-full justify-center md:justify-start">
     <p class="text-2xl">I'm a</p>
-    <!-- <div class="absolute inset-0 z-0 bg-red-500 border-l-2 border-primary border-solid animate-textAnimation box-border h-full w-full"></div> -->
-    <p class="text-2xl text-primary relative" id="animateableText"></p>
+    <p class="text-2xl text-primary relative overflow-hidden" id="animateableText"></p>
 </div>
 
-<script is:inline>
-    start();
+<script>
+class TextAnimator {
+    private element: HTMLElement | null;
+    private texts: string[];
+    private currentIndex: number;
+    private delay: number;
+    private isAnimating: boolean;
 
-    
-    function start()
-    {
-        let animateableText = document.querySelector("#animateableText");
-        let delay = 5000; //ms
-        let texts = [
-            "fullstack developer",
-            "devOps engineer",
-            "dark mode enthusiast",
-        ]
+    constructor(elementId: string, texts: string[], delay: number) {
+        this.element = document.getElementById(elementId);
+        this.texts = texts;
+        this.currentIndex = 0;
+        this.delay = delay;
+        this.isAnimating = false;
+    }
 
-        animateText(animateableText, delay, texts);
-        setInterval(animateText, delay * texts.length);
-    }    
-    
-    function animateText(animateableText, delay, texts) {
+    animate() {
+        if (!this.element) return;
 
-        if(animateableText == null)
-            return;
+        // Update text content
+        this.element.textContent = this.texts[this.currentIndex];
+        
+        // Reset animation by removing and re-adding the pseudo-element class
+        this.element.classList.remove('animate-typing');
+        void this.element.offsetWidth; // Force reflow
+        this.element.classList.add('animate-typing');
 
-        for(let i = 0; i < texts.length; i++)
-        {
-            setTimeout(() => {
-                animateableText.innerHTML = texts[i];
-            }, delay * i + 300);
+        // Prepare for next text
+        this.currentIndex = (this.currentIndex + 1) % this.texts.length;
+
+        // Schedule next animation
+        setTimeout(() => this.animate(), this.delay);
+    }
+
+    start() {
+        if (this.element) {
+            this.element.classList.add('animate-typing');
+            this.animate();
         }
-    };
+    }
+}
 
-
-
+// Initialize when document is ready
+document.addEventListener('DOMContentLoaded', () => {
+    const animator = new TextAnimator('animateableText', [
+        "fullstack developer",
+        "devOps engineer",
+        "home automation tinker",
+        "dark mode enthusiast",
+    ], 5000);
+    
+    animator.start();
+});
 </script>
 
 <style>
-    #animateableText::before {
-  content: "";
-  position: absolute;
-  display: inline-block;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: #1f2022;
-  border-left: 2px solid #4070f4;
-  animation: textAnimation 5s steps(24) infinite;
-  animation-delay: 300ms;
-}
+    #animateableText {
+        min-height: 1.5em;
+    }
 
-@keyframes textAnimation{
-40%,60% {
-    left:100%;
-    
-}
-100% {
-    left:0%
-}
-}
+    .animate-typing {
+        position: relative;
+    }
 
+    .animate-typing::before {
+        content: "";
+        position: absolute;
+        display: inline-block;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: var(--color-body, #1f2022);
+        border-left: 2px solid var(--color-primary, #4070f4);
+        animation: textAnimation 5s steps(24) infinite;
+        animation-delay: 300ms;
+    }
+
+    @keyframes textAnimation {
+        40%, 60% {
+            left: 100%;
+        }
+        100% {
+            left: 0%
+        }
+    }
+
+    :global(.dark) .animate-typing::before {
+        background-color: var(--color-body-dark, #1f2022);
+        border-left-color: var(--color-primary-dark, #4070f4);
+    }
 </style>

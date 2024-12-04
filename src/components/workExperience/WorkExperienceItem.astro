@@ -1,22 +1,12 @@
 ---
-import { Image } from 'astro:assets';
+export interface Props {
+    name: string;
+    yearRange: string;
+    description: string;
+    href: string | null;
+}
 
-import type { PortfolioItemProps } from '../../types/common';
-export interface Props extends PortfolioItemProps {}
-
-const { name, description, href, image, status = 'completed' } = Astro.props;
-
-const statusColors = {
-    'completed': 'bg-green-500',
-    'in-progress': 'bg-yellow-500',
-    'archived': 'bg-blue-500'
-};
-
-const statusText = {
-    'completed': 'Completed',
-    'in-progress': 'In Progress',
-    'archived': 'Archived / Finished'
-};
+const { name, description, href, yearRange} = Astro.props;
 ---
 
 <article 
@@ -25,19 +15,10 @@ const statusText = {
     itemtype="https://schema.org/Project"
 >
     <div class="relative">
-        <Image 
-            src={`/assets/portfolio/${image}`}
-            alt={`Screenshot or preview of ${name}`}
-            width={800}
-            height={600}
-            class="rounded-md w-full h-[40vh] object-cover"
-            loading="lazy"
-            itemprop="image"
-        />
         <span 
-            class={`absolute top-2 right-2 px-2 py-1 rounded-full text-white text-sm ${statusColors[status]}`}
+            class={`absolute top-2 right-2 px-2 py-1 rounded-full text-white text-sm bg-green-500`}
         >
-            {statusText[status]}
+            {yearRange}
         </span>
     </div>
 
@@ -62,7 +43,7 @@ const statusText = {
             rel="noopener noreferrer"
             itemprop="url"
         >
-            View Project
+            Open workplace website
             <svg 
                 class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" 
                 fill="none" 
