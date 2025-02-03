@@ -2,6 +2,12 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
+# Allow all important pages
+Allow: /portfolio
+Allow: /work-experience
+Allow: /blog
+Allow: /blog/*
+
 # Prevent indexing of specific file types
 Disallow: /*.json$
 Disallow: /*.xml$

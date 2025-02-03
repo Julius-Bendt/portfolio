@@ -31,8 +31,12 @@ export function generateSchemaOrg(data: SchemaOrgData) {
         "@type": "Person",
         "name": "Julius Bendt",
         "url": "https://jub.dk",
-        "jobTitle": "Fullstack Developer",
-        "description": "Fullstack developer, DevOps engineer and dark mode enthusiast",
+        "jobTitle": ["Software Developer", "Software Engineer", "Fullstack Developer"],
+        "description": "Software Developer based in Aalborg, Denmark, specializing in fullstack development and DevOps",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "Denmark"
+        },
         "sameAs": [
             "https://github.com/Julius-Bendt",
             "https://www.linkedin.com/in/julius-bendt",
