@@ -1,68 +1,76 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import readline from 'readline';
+import { promises as fs } from "fs";
+import path from "path";
+import readline from "readline";
 
-const BLOG_DIR = path.join(process.cwd(), 'src', 'content', 'blog');
-const PUBLIC_BLOG_ASSETS = path.join(process.cwd(), 'public', 'assets', 'blog');
+const BLOG_DIR = path.join(process.cwd(), "src", "content", "blog");
+const SRC_BLOG_ASSETS = path.join(process.cwd(), "src", "assets", "blog");
 
 interface BlogPostDetails {
-    title: string;
-    slug: string;
-    description: string;
-    keywords: string[];
+  title: string;
+  slug: string;
+  description: string;
+  keywords: string[];
 }
 
 async function promptUser(): Promise<BlogPostDetails> {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
 
-    const question = (query: string): Promise<string> =>
-        new Promise(resolve => rl.question(query, resolve));
+  const question = (query: string): Promise<string> =>
+    new Promise((resolve) => rl.question(query, resolve));
 
-    const title = await question('Enter blog post title: ');
+  const title = await question("Enter blog post title: ");
 
-    const defaultSlug = title
-        .toLowerCase()
-        .replace(/[^a-zA-Z0-9\s]/g, '')
-        .replace(/\s+/g, '-');
+  const defaultSlug = title
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .replace(/\s+/g, "-");
 
-    const slugInput = await question(`Enter slug (press enter to use "${defaultSlug}"): `);
-    const slug = slugInput.trim() || defaultSlug;
+  const slugInput = await question(
+    `Enter slug (press enter to use "${defaultSlug}"): `
+  );
+  const slug = slugInput.trim() || defaultSlug;
 
-    const description = await question('Enter blog post description: ');
+  const description = await question("Enter blog post description: ");
 
-    const defaultKeywords = ['software development', 'web development', 'programming'];
-    const keywordsInput = await question(`Enter keywords (comma-separated, press enter for defaults: ${defaultKeywords.join(', ')}): `);
-    const keywords = keywordsInput.trim()
-        ? keywordsInput.split(',').map(k => k.trim())
-        : defaultKeywords;
+  const defaultKeywords = [
+    "software development",
+    "web development",
+    "programming",
+  ];
+  const keywordsInput = await question(
+    `Enter keywords (comma-separated, press enter for defaults: ${defaultKeywords.join(", ")}): `
+  );
+  const keywords = keywordsInput.trim()
+    ? keywordsInput.split(",").map((k) => k.trim())
+    : defaultKeywords;
 
-    rl.close();
+  rl.close();
 
-    return { title, slug, description, keywords };
+  return { title, slug, description, keywords };
 }
 
 async function createBlogPost(details: BlogPostDetails) {
-    const postDir = path.join(BLOG_DIR, details.slug);
+  const postDir = path.join(BLOG_DIR, details.slug);
 
-    // Create blog post directory
-    await fs.mkdir(postDir, { recursive: true });
+  // Create blog post directory
+  await fs.mkdir(postDir, { recursive: true });
 
-    // Ensure public blog assets directory exists
-    await fs.mkdir(PUBLIC_BLOG_ASSETS, { recursive: true });
+  // Ensure src/assets/blog directory exists
+  await fs.mkdir(SRC_BLOG_ASSETS, { recursive: true });
 
-    // Create frontmatter content
-    const currentDate = new Date().toISOString().split('T')[0];
-    const frontmatter = `---
+  // Create frontmatter content
+  const currentDate = new Date().toISOString().split("T")[0];
+  const frontmatter = `---
 title: '${details.title}'
 description: '${details.description}'
 pubDate: '${currentDate}'
 # updatedDate: '${currentDate}'
 draft: true
-keywords: [${details.keywords.map(k => `'${k}'`).join(', ')}]
-# heroImage: '/blog/${details.slug}/hero.webp'
+keywords: [${details.keywords.map((k) => `'${k}'`).join(", ")}]
+# heroImage: 'blog/${details.slug}/hero.webp'
 # heroAlt: 'Alt text for hero image'
 ---
 
@@ -71,13 +79,13 @@ Write your blog post content here...
 ## Images
 Add images to your blog post:
 
-1. Place your images in \`public/assets/blog/${details.slug}/\`
+1. Place your images in \`src/assets/blog/${details.slug}/\`
 2. For hero image:
-   - Add the image to \`public/assets/blog/${details.slug}/hero.webp\`
+   - Add the image to \`src/assets/blog/${details.slug}/hero.webp\`
    - Uncomment and update heroImage & heroAlt in frontmatter
 3. Reference images in your content:
    \`\`\`markdown
-   ![Image description](/assets/blog/${details.slug}/your-image.webp)
+   ![Image description](/blog/${details.slug}/your-image.webp)
    \`\`\`
 
 ## SEO Optimization
@@ -101,20 +109,20 @@ This blog post includes:
 - Recommended hero image size: 1200x630px (optimal for social sharing)
 `;
 
-    // Create index.md with frontmatter
-    await fs.writeFile(path.join(postDir, 'index.md'), frontmatter);
+  // Create index.md with frontmatter
+  await fs.writeFile(path.join(postDir, "index.md"), frontmatter);
 
-    // Create blog-specific assets directory in public folder
-    const publicPostDir = path.join(PUBLIC_BLOG_ASSETS, details.slug);
-    await fs.mkdir(publicPostDir, { recursive: true });
+  // Create blog-specific assets directory under src/assets
+  const srcPostDir = path.join(SRC_BLOG_ASSETS, details.slug);
+  await fs.mkdir(srcPostDir, { recursive: true });
 
-    // Create a README in the public assets directory
-    const assetsReadme = `# Blog Assets for "${details.title}"
+  // Create a README in the assets directory
+  const assetsReadme = `# Blog Assets for "${details.title}"
 
 Store your blog post images here.
 
 ## Directory Structure
-/public/assets/blog/${details.slug}/
+src/assets/blog/${details.slug}/
 ├── hero.webp        # Main image for the blog post
 └── other-images/    # Additional images used in the post
 
@@ -127,7 +135,7 @@ Store your blog post images here.
 
 ## Reference Images in Markdown
 \`\`\`markdown
-![Image description](/assets/blog/${details.slug}/your-image.webp)
+![Image description](/blog/${details.slug}/your-image.webp)
 \`\`\`
 
 ## Tools for Image Optimization
@@ -135,39 +143,38 @@ Store your blog post images here.
 - imageoptim.com - Desktop app for macOS
 - tinypng.com - Online PNG and JPEG compression`;
 
-    await fs.writeFile(path.join(publicPostDir, 'README.md'), assetsReadme);
+  await fs.writeFile(path.join(srcPostDir, "README.md"), assetsReadme);
 
-    return {
-        postDir,
-        assetsDir: publicPostDir
-    };
+  return {
+    postDir,
+    assetsDir: srcPostDir,
+  };
 }
 
 async function main() {
-    try {
-        console.log('🚀 Creating new blog post...\n');
+  try {
+    console.log("🚀 Creating new blog post...\n");
 
-        const details = await promptUser();
-        const { postDir, assetsDir } = await createBlogPost(details);
+    const details = await promptUser();
+    const { postDir, assetsDir } = await createBlogPost(details);
 
-        console.log('\n✅ Blog post created successfully!');
-        console.log('\nDirectories created:');
-        console.log('Content:', postDir);
-        console.log('Assets:', assetsDir);
-        console.log('\nNext steps:');
-        console.log('1. Add your content to index.md');
-        console.log(`2. Add images to ${assetsDir}`);
-        console.log('3. Review and update SEO elements (keywords, description)');
-        console.log('4. Set draft: false when ready to publish');
-        console.log('\nPro tips:');
-        console.log('- Use .webp format for images');
-        console.log('- Optimize images before adding them');
-        console.log('- Hero image size: 1200x630px (optimal for social sharing)');
-
-    } catch (error) {
-        console.error('\n❌ Error creating blog post:', error);
-        process.exit(1);
-    }
+    console.log("\n✅ Blog post created successfully!");
+    console.log("\nDirectories created:");
+    console.log("Content:", postDir);
+    console.log("Assets (src/assets):", assetsDir);
+    console.log("\nNext steps:");
+    console.log("1. Add your content to index.md");
+    console.log(`2. Add images to ${assetsDir}`);
+    console.log("3. Review and update SEO elements (keywords, description)");
+    console.log("4. Set draft: false when ready to publish");
+    console.log("\nPro tips:");
+    console.log("- Use .webp format for images");
+    console.log("- Optimize images before adding them");
+    console.log("- Hero image size: 1200x630px (optimal for social sharing)");
+  } catch (error) {
+    console.error("\n❌ Error creating blog post:", error);
+    process.exit(1);
+  }
 }
 
 main();

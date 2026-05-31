@@ -1,0 +1,30 @@
+# Personal (unredacted) CV — keep local only
+en.tex
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.xdv
+
+# Build directory
+*.pdf
+
+# Editor files
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Nix
+result
+result-*
+core

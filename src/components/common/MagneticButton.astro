@@ -1,0 +1,128 @@
+---
+export interface Props {
+  class?: string;
+  href?: string;
+  download?: boolean;
+  ariaLabel?: string;
+}
+
+const { class: className = "", href, download, ariaLabel } = Astro.props;
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  href={href}
+  download={download}
+  class={`magnetic-button ${className}`}
+  aria-label={ariaLabel}
+  data-magnetic
+>
+  <span class="magnetic-button-content">
+    <slot />
+  </span>
+</Tag>
+
+<script>
+  class MagneticButton {
+    private element: HTMLElement;
+    private boundingRect: DOMRect;
+    private strength: number = 0.3;
+    private isHovering: boolean = false;
+
+    constructor(element: HTMLElement) {
+      this.element = element;
+      this.boundingRect = element.getBoundingClientRect();
+      this.init();
+    }
+
+    init() {
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      if (prefersReducedMotion) return;
+
+      // Only enable on desktop
+      if (window.innerWidth < 768) return;
+
+      this.element.addEventListener(
+        "mouseenter",
+        this.handleMouseEnter.bind(this)
+      );
+      this.element.addEventListener(
+        "mousemove",
+        this.handleMouseMove.bind(this)
+      );
+      this.element.addEventListener(
+        "mouseleave",
+        this.handleMouseLeave.bind(this)
+      );
+
+      // Update bounding rect on resize
+      window.addEventListener("resize", () => {
+        this.boundingRect = this.element.getBoundingClientRect();
+      });
+    }
+
+    handleMouseEnter() {
+      this.isHovering = true;
+      this.boundingRect = this.element.getBoundingClientRect();
+    }
+
+    handleMouseMove(e: MouseEvent) {
+      if (!this.isHovering) return;
+
+      const rect = this.boundingRect;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const deltaX = (e.clientX - centerX) * this.strength;
+      const deltaY = (e.clientY - centerY) * this.strength;
+
+      this.element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    }
+
+    handleMouseLeave() {
+      this.isHovering = false;
+      this.element.style.transform = "translate(0px, 0px)";
+    }
+  }
+
+  // Initialize all magnetic buttons
+  function initMagneticButtons() {
+    const buttons = document.querySelectorAll("[data-magnetic]");
+    buttons.forEach((button) => {
+      if (button instanceof HTMLElement) {
+        new MagneticButton(button);
+      }
+    });
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMagneticButtons);
+  } else {
+    initMagneticButtons();
+  }
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener("astro:page-load", initMagneticButtons);
+</script>
+
+<style>
+  .magnetic-button {
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .magnetic-button-content {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .magnetic-button {
+      transition: none;
+    }
+  }
+</style>

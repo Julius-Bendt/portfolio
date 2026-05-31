@@ -1,155 +1,221 @@
 ---
-import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../../consts';
-
+import HeaderLink from "./HeaderLink.astro";
+import MagneticButton from "./MagneticButton.astro";
 const navigationLinks = [
-    { href: '/', text: 'Home', ariaLabel: 'Navigate to home page' },
-    { href: '/portfolio', text: 'Portfolio', ariaLabel: 'View portfolio of work' },
-    { href: '/work-experience', text: 'Work experience', ariaLabel: 'View work experience' },
-    { href: '/blog', text: 'Blog', ariaLabel: 'Read blog posts' }
+  { href: "/", text: "Home", ariaLabel: "Navigate to home page" },
+  {
+    href: "/portfolio",
+    text: "Portfolio",
+    ariaLabel: "View portfolio of work",
+  },
+  {
+    href: "/work-experience",
+    text: "Work experience",
+    ariaLabel: "View work experience",
+  },
+  { href: "/blog", text: "Blog", ariaLabel: "Read blog posts" },
 ] as const;
 ---
 
-<header role="banner" class="relative z-50">
-    <nav class="hidden md:flex bg-bodyAccent text-white shadow-lg" aria-label="Main navigation">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <span class="text-lg font-bold" role="heading" aria-level="1">
-                        Julius H. Bendt 💻
-                    </span>
-                </div>
-
-                <div class="flex items-center space-x-4" role="navigation">
-                    {navigationLinks.map(link => (
-                        <HeaderLink 
-                            href={link.href}
-                            class="group flex items-center p-4 hover:bg-gray-700 transition-all rounded-md"
-                            aria-label={link.ariaLabel}
-                        >
-                            <span>{link.text}</span>
-                        </HeaderLink>
-                    ))}
-                </div>
-            </div>
+<header role="banner" class="sticky top-0 z-50">
+  <nav
+    class="hidden md:flex bg-bodyAccent text-white shadow-lg"
+    aria-label="Main navigation"
+  >
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-lg font-bold"> Julius Håland Bendt </span>
         </div>
+
+        <div class="flex items-center space-x-4">
+          {
+            navigationLinks.map((link) => (
+              <HeaderLink
+                href={link.href}
+                class="group flex items-center p-4 hover:bg-gray-700 transition-all rounded-md"
+                aria-label={link.ariaLabel}
+              >
+                <span>{link.text}</span>
+              </HeaderLink>
+            ))
+          }
+          <MagneticButton
+            href="/assets/documents/cv.pdf"
+            download={true}
+            class="flex items-center px-4 py-2 bg-primary hover:bg-opacity-90 text-black font-semibold rounded-md transition-all"
+            ariaLabel="Download CV as PDF"
+          >
+            Download CV
+          </MagneticButton>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="md:hidden">
+    <nav
+      id="mobileMenu"
+      class="fixed inset-x-0 bottom-0 text-white shadow-lg bg-bodyAccent transform transition-all duration-300 ease-in-out z-[60]"
+      aria-label="Mobile navigation"
+      role="navigation"
+      style="transform: translateY(100%)"
+    >
+      <div class="flex flex-col p-4 rounded-t-lg">
+        {
+          navigationLinks.map((link) => (
+            <HeaderLink
+              href={link.href}
+              class="flex items-center p-4 hover:bg-gray-700 transition-all rounded-md mb-2"
+              aria-label={link.ariaLabel}
+            >
+              <span>{link.text}</span>
+            </HeaderLink>
+          ))
+        }
+        <a
+          href="/assets/documents/cv.pdf"
+          download
+          class="flex items-center justify-center p-4 bg-primary hover:bg-opacity-90 text-black font-semibold rounded-md transition-all mt-2"
+          aria-label="Download CV as PDF"
+        >
+          <span>Download CV</span>
+        </a>
+      </div>
     </nav>
 
-    <div class="md:hidden">
-        <nav 
-            id="mobileMenu" 
-            class="fixed inset-x-0 bottom-0 text-white shadow-lg bg-bodyAccent transform transition-all duration-300 ease-in-out z-[60]"
-            aria-label="Mobile navigation"
-            role="navigation"
-            style="transform: translateY(100%)"
-        >
-            <div class="flex flex-col p-4 rounded-t-lg">
-                {navigationLinks.map(link => (
-                    <HeaderLink 
-                        href={link.href}
-                        class="flex items-center p-4 hover:bg-gray-700 transition-all rounded-md mb-2"
-                        aria-label={link.ariaLabel}
-                    >
-                        <span>{link.text}</span>
-                    </HeaderLink>
-                ))}
-            </div>
-        </nav>
-
-        <div 
-            id="menuOverlay"
-            class="fixed inset-0 bg-black/50 z-[45] hidden"
-            aria-hidden="true"
-        >
-        </div>
-
-        <button
-            id="menuButton"
-            class="fixed bottom-4 right-4 z-[80] p-4 rounded-2xl bg-primary dark:bg-primary text-black hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-14 h-14 flex items-center justify-center"
-            aria-label="Toggle navigation menu"
-            aria-expanded="false"
-            aria-controls="mobileMenu"
-        >
-            <div class="burger-icon w-6 flex flex-col items-end gap-1.5" aria-hidden="true">
-                <span class="h-0.5 w-6 bg-black transform transition-all duration-300 ease-in-out rounded-full"></span>
-                <span class="h-0.5 w-6 bg-black transform transition-all duration-300 ease-in-out rounded-full"></span>
-                <span class="h-0.5 w-4 bg-black transform transition-all duration-300 ease-in-out rounded-full"></span>
-            </div>
-        </button>
+    <div
+      id="menuOverlay"
+      class="fixed inset-0 bg-black/50 z-[45] hidden"
+      aria-hidden="true"
+    >
     </div>
+
+    <button
+      id="menuButton"
+      class="fixed bottom-4 right-4 z-[80] p-4 rounded-2xl bg-primary dark:bg-primary text-black hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 w-14 h-14 flex items-center justify-center"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobileMenu"
+    >
+      <div
+        class="burger-icon w-6 flex flex-col items-end gap-1.5"
+        aria-hidden="true"
+      >
+        <span
+          class="h-0.5 w-6 bg-black transform transition-all duration-300 ease-in-out rounded-full"
+        ></span>
+        <span
+          class="h-0.5 w-6 bg-black transform transition-all duration-300 ease-in-out rounded-full"
+        ></span>
+        <span
+          class="h-0.5 w-4 bg-black transform transition-all duration-300 ease-in-out rounded-full"
+        ></span>
+      </div>
+    </button>
+  </div>
 </header>
 
 <style>
-    /* Burger icon animation */
-    .burger-icon.active span:nth-child(1) {
-        transform: rotate(45deg) translate(6px, 6px);
-    }
+  /* Burger icon animation */
+  .burger-icon.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
 
-    .burger-icon.active span:nth-child(2) {
-        opacity: 0;
-    }
+  .burger-icon.active span:nth-child(2) {
+    opacity: 0;
+  }
 
-    .burger-icon.active span:nth-child(3) {
-        width: 24px;
-        transform: rotate(-45deg) translate(5px, -5px);
-    }
+  .burger-icon.active span:nth-child(3) {
+    width: 24px;
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
 
-    /* Mobile menu animation */
-    #mobileMenu.active {
-        transform: translateY(0) !important;
-    }
+  /* Mobile menu animation */
+  #mobileMenu.active {
+    transform: translateY(0) !important;
+  }
 </style>
 
 <script>
-    const menuButton = document.getElementById('menuButton');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuOverlay = document.getElementById('menuOverlay');
-    const burgerIcon = menuButton?.querySelector('.burger-icon');
+  import { BREAKPOINTS } from "../../constants/site";
+  import { capture } from "../../utils/analytics";
 
-    if (menuButton && mobileMenu && menuOverlay && burgerIcon) {
-        let isOpen = false;
+  function initMobileMenu() {
+    const menuButton = document.getElementById("menuButton");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const menuOverlay = document.getElementById("menuOverlay");
 
-        const toggleMenu = () => {
-            isOpen = !isOpen;
-            burgerIcon.classList.toggle('active');
-            menuButton.setAttribute('aria-expanded', isOpen.toString());
-            
-            if (isOpen) {
-                menuOverlay.classList.remove('hidden');
-                mobileMenu.style.transform = 'translateY(0)';
-                document.body.style.overflow = 'hidden';
-            } else {
-                mobileMenu.style.transform = 'translateY(100%)';
-                setTimeout(() => {
-                    menuOverlay.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }, 300);
-            }
-        };
-
-        menuButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleMenu();
-        });
-
-        document.addEventListener('click', (event) => {
-            if (isOpen && !menuButton.contains(event.target as Node) && 
-                !mobileMenu.contains(event.target as Node)) {
-                toggleMenu();
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 768 && isOpen) {
-                toggleMenu();
-            }
-        });
-
-        const menuItems = mobileMenu.querySelectorAll('a');
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
-                toggleMenu();
-            });
-        });
+    if (!menuButton || !mobileMenu || !menuOverlay) {
+      return;
     }
+
+    const burgerIcon = menuButton.querySelector(".burger-icon");
+    if (!burgerIcon) {
+      return;
+    }
+
+    let isOpen = false;
+
+    const toggleMenu = () => {
+      isOpen = !isOpen;
+      burgerIcon.classList.toggle("active");
+      menuButton.setAttribute("aria-expanded", isOpen.toString());
+      capture("mobile_menu_toggle", { action: isOpen ? "open" : "close" });
+
+      if (isOpen) {
+        menuOverlay.classList.remove("hidden");
+        mobileMenu.style.transform = "translateY(0)";
+        document.body.style.overflow = "hidden";
+      } else {
+        mobileMenu.style.transform = "translateY(100%)";
+        setTimeout(() => {
+          if (!isOpen) {
+            menuOverlay.classList.add("hidden");
+            document.body.style.overflow = "";
+          }
+        }, 300);
+      }
+    };
+
+    menuButton.addEventListener("click", (e: Event) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    document.querySelectorAll<HTMLAnchorElement>('[href="/assets/documents/cv.pdf"]').forEach((link) => {
+      if (link.dataset.cvTracked) return;
+      link.dataset.cvTracked = "true";
+      link.addEventListener("click", () => capture("cv_download"));
+    });
+
+    document.addEventListener("click", (event: MouseEvent) => {
+      const target = event.target;
+      if (
+        target instanceof Node &&
+        isOpen &&
+        !menuButton.contains(target) &&
+        !mobileMenu.contains(target)
+      ) {
+        toggleMenu();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= BREAKPOINTS.mobile && isOpen) {
+        toggleMenu();
+      }
+    });
+
+    const menuItems = mobileMenu.querySelectorAll("a");
+    menuItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        toggleMenu();
+      });
+    });
+  }
+
+  // Re-initialize after every Astro client-side navigation (View Transitions)
+  document.addEventListener("astro:page-load", initMobileMenu);
+
 </script>

@@ -1,0 +1,85 @@
+---
+// Wraps a timeline list and provides an expand/collapse-all button.
+---
+
+<div data-timeline-root class="flex flex-col gap-2">
+  <div class="flex justify-end">
+    <button
+      data-timeline-toggle
+      class="text-sm text-gray-400 hover:text-primary transition-colors duration-200 flex items-center gap-1"
+      aria-label="Toggle all timeline entries"
+    >
+      <span data-toggle-label>Collapse all</span>
+      <svg
+        data-toggle-icon
+        class="w-4 h-4 transition-transform duration-300 rotate-180"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="relative">
+    <div class="absolute left-[7px] top-5 bottom-5 w-0.5 bg-gray-500" />
+    <div class="flex flex-col" data-timeline-items>
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  :global([data-timeline-items] .timeline-hr:last-of-type) {
+    display: none;
+  }
+</style>
+
+<script>
+  import { capture } from "../../utils/analytics";
+
+  function initTimelines() {
+    document.querySelectorAll<HTMLElement>("[data-timeline-root]").forEach((root) => {
+      if (root.dataset.initialized) return;
+      root.dataset.initialized = "true";
+
+      const toggle = root.querySelector<HTMLButtonElement>("[data-timeline-toggle]");
+      const label = root.querySelector<HTMLElement>("[data-toggle-label]");
+      const icon = root.querySelector<SVGElement>("[data-toggle-icon]");
+      const details = root.querySelectorAll<HTMLDetailsElement>("details");
+
+      function syncLabel() {
+        const anyOpen = Array.from(details).some((d) => d.open);
+        if (label) label.textContent = anyOpen ? "Collapse all" : "Expand all";
+        if (icon) icon.classList.toggle("rotate-180", anyOpen);
+      }
+
+      toggle?.addEventListener("click", () => {
+        const anyOpen = Array.from(details).some((d) => d.open);
+        if (anyOpen) {
+          details.forEach((d) => d.dispatchEvent(new CustomEvent("timeline:close")));
+        } else {
+          details.forEach((d) => (d.open = true));
+        }
+        capture("timeline_toggle_all", {
+          action: anyOpen ? "collapse_all" : "expand_all",
+          page: window.location.pathname,
+        });
+        syncLabel();
+      });
+
+      details.forEach((d) => d.addEventListener("toggle", syncLabel));
+
+      syncLabel();
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTimelines);
+  } else {
+    initTimelines();
+  }
+
+  document.addEventListener("astro:page-load", initTimelines);
+</script>

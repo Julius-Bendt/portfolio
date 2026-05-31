@@ -1,0 +1,138 @@
+---
+export interface Props {
+  title: string;
+  shortDescription?: string;
+  dateRange?: string;
+  badges?: string[];
+  open?: boolean;
+  itemtype?: string;
+}
+
+const { title, shortDescription, dateRange, badges = [], open = false, itemtype } = Astro.props;
+---
+
+<div
+  class="relative pl-8 pt-1"
+  itemscope={itemtype ? true : undefined}
+  itemtype={itemtype}
+>
+  <div class="absolute left-0 top-5 w-3.5 h-3.5 rounded-full bg-primary ring-2 ring-body z-10" />
+
+  <details open={open} class="group/item" data-timeline-details data-item-title={title}>
+    <summary class="cursor-pointer list-none flex items-start justify-between gap-4 py-3 hover:text-primary transition-colors duration-200">
+      <div class="flex flex-col gap-1.5">
+        <span class="text-lg font-bold leading-tight" itemprop="name">{title}</span>
+        {shortDescription && (
+          <p class="text-sm text-gray-400 font-normal">{shortDescription}</p>
+        )}
+        {badges.length > 0 && (
+          <div class="flex flex-wrap gap-1.5">
+            {badges.map((badge) => (
+              <span class="bg-bodyAccent px-2 py-0.5 rounded text-xs text-gray-300">
+                {badge}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+      <div class="flex items-center gap-2 shrink-0 mt-0.5">
+        {dateRange && (
+          <span class="text-sm text-gray-400 whitespace-nowrap">{dateRange}</span>
+        )}
+        <svg
+          class="w-5 h-5 text-gray-400 group-open/item:rotate-180 transition-transform duration-300"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+    </summary>
+
+    <div class="collapsible-content pb-4">
+      <slot />
+    </div>
+  </details>
+</div>
+<hr class="timeline-hr border-gray-500 ml-8" />
+
+<style>
+  details[open] .collapsible-content {
+    animation: slideDown 0.25s ease-out;
+  }
+
+  .collapsible-content.closing {
+    animation: slideUp 0.2s ease-in forwards !important;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+</style>
+
+<script>
+  import { capture } from "../../utils/analytics";
+
+  function closeWithAnimation(details: HTMLDetailsElement) {
+    if (!details.open) return;
+    const content = details.querySelector<HTMLElement>(".collapsible-content");
+    if (!content) {
+      details.removeAttribute("open");
+      return;
+    }
+    content.classList.add("closing");
+    setTimeout(() => {
+      content.classList.remove("closing");
+      details.removeAttribute("open");
+    }, 200);
+  }
+
+  function initTimelineItems() {
+    document.querySelectorAll<HTMLDetailsElement>("[data-timeline-details]").forEach((details) => {
+      if (details.dataset.initialized) return;
+      details.dataset.initialized = "true";
+
+      const summary = details.querySelector("summary");
+      summary?.addEventListener("click", (e) => {
+        const title = details.dataset.itemTitle;
+        const page = window.location.pathname;
+        if (details.open) {
+          e.preventDefault();
+          capture("timeline_item_collapsed", { title, page });
+          closeWithAnimation(details);
+        } else {
+          capture("timeline_item_expanded", { title, page });
+        }
+      });
+
+      details.addEventListener("timeline:close", () => closeWithAnimation(details));
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTimelineItems);
+  } else {
+    initTimelineItems();
+  }
+
+  document.addEventListener("astro:page-load", initTimelineItems);
+</script>

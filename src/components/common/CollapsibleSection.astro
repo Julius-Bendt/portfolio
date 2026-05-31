@@ -1,0 +1,108 @@
+---
+export interface Props {
+  title: string;
+  open?: boolean;
+}
+
+const { title, open = true } = Astro.props;
+---
+
+<div class="mb-2">
+  <details open={open} class="group/section" data-timeline-details data-section-title={title}>
+    <summary class="cursor-pointer list-none flex items-center justify-between py-2 border-b border-gray-600 hover:text-primary hover:border-primary transition-colors duration-200">
+      <span class="text-xl font-semibold">{title}</span>
+      <svg
+        class="w-4 h-4 text-gray-400 group-open/section:rotate-180 transition-transform duration-300"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </summary>
+
+    <div class="collapsible-content pt-2">
+      <slot />
+    </div>
+  </details>
+</div>
+
+<style>
+  details[open] .collapsible-content {
+    animation: slideDown 0.25s ease-out;
+  }
+
+  .collapsible-content.closing {
+    animation: slideUp 0.2s ease-in forwards !important;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+</style>
+
+<script>
+  import { capture } from "../../utils/analytics";
+
+  function closeWithAnimation(details: HTMLDetailsElement) {
+    if (!details.open) return;
+    const content = details.querySelector<HTMLElement>(".collapsible-content");
+    if (!content) {
+      details.removeAttribute("open");
+      return;
+    }
+    content.classList.add("closing");
+    setTimeout(() => {
+      content.classList.remove("closing");
+      details.removeAttribute("open");
+    }, 200);
+  }
+
+  function initTimelineItems() {
+    document.querySelectorAll<HTMLDetailsElement>("[data-timeline-details]").forEach((details) => {
+      if (details.dataset.initialized) return;
+      details.dataset.initialized = "true";
+
+      const summary = details.querySelector("summary");
+      summary?.addEventListener("click", (e) => {
+        if (details.open) {
+          e.preventDefault();
+          if (details.dataset.sectionTitle) {
+            capture("tech_section_collapsed", { section: details.dataset.sectionTitle });
+          }
+          closeWithAnimation(details);
+        } else if (details.dataset.sectionTitle) {
+          capture("tech_section_expanded", { section: details.dataset.sectionTitle });
+        }
+      });
+
+      details.addEventListener("timeline:close", () => closeWithAnimation(details));
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initTimelineItems);
+  } else {
+    initTimelineItems();
+  }
+
+  document.addEventListener("astro:page-load", initTimelineItems);
+</script>

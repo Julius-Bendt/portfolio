@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /blog/drafts/
 
 # Prevent indexing of specific file types
 Disallow: /*.json$

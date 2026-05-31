@@ -1,0 +1,219 @@
+\documentclass[a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,margin=7em]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{marvosym}
+\usepackage{tabularx}
+\usepackage{multicol}
+\usepackage{tabu}
+\usepackage{longtable}[=v4.13]
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\setitemize{itemsep=2pt, topsep=2pt, align=right, labelindent=\parindent, leftmargin=!, itemindent=!, labelsep=.5em, labelwidth=!}
+\usepackage{datetime}
+
+\newdateformat{mydate}{\shortmonthname[\THEMONTH] \THEDAY, \THEYEAR}
+\setitemize{itemsep=2pt, topsep=2pt, align=right, labelindent=\parindent, leftmargin=!, itemindent=!, labelsep=.5em, labelwidth=!}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.0pt}
+\fancyfoot[L]{\scriptsize Source code: \url{https://github.com/Julius-Bendt/cv}}
+\def\ver{ Most up-to-date version: \url{https://jub.dk/cv.pdf}}
+\def\compdate{This version was compiled on \mydate\today}
+\fancyfoot[R]{\scriptsize \compdate\\\ver}
+\pagenumbering{gobble}
+
+\def\secsep{\hrule width5cm}
+\title{\bfseries\Huge CV}
+\begin{document}
+\section*{\centering \Huge CV}\subsection*{\centering Julius Håland Bendt}
+
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \href{https://maps.app.goo.gl/Ke3U2CQXPysaGYaB6}{\faIcon{map-marker-alt}~Aalborg, Denmark}&
+    \multirow[t]{6}{=}{
+    I'm a fullstack developer \& tech lead working primarily with \textbf{Vue}, \textbf{Laravel}, and \textbf{.NET}, comfortable across the full stack from modern frontends to backend APIs, databases, and \textbf{Azure} infrastructure.
+    I like building well-structured systems, working on architecture, and helping teams write code they're actually proud of.
+    I've worked across different types of roles - consulting, co-founding, leading teams - and I find the people side of technical leadership just as interesting as the technical work.
+    I care about code quality and can communicate technical decisions clearly to both developers and non-technical stakeholders.
+    }\\\\[-4pt]
+    \href{https://github.com/Julius-Bendt}{\faIcon{github}~\footnotesize\faIcon{at}\normalsize\texttt{Julius-Bendt}} \\\\[-5pt]
+    \href{https://linkedin.com/in/julius-bendt}{\faIcon{linkedin}~julius-bendt}\\\\[-5pt]
+    \href{https://jub.dk}{\faIcon{link}~\texttt{jub.dk}}\\\\[-12pt]
+    \bottomrule
+\end{tabularx}
+\subsection*{Selected Competencies}
+\secsep
+\vspace{-1.3em}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcommand{\subpart}[2][\scriptsize]{\vspace{-.3em}\begin{itemize}[leftmargin=-2em, topsep=-.9em, parsep=0em]
+    \item[]  {#1 #2}
+\end{itemize}\vspace{.7em}}
+
+\begin{multicols}{3}
+    \centering
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Backend Development
+            \subpart{.NET, Node.js, Laravel, PHP}
+        \item Frontend Development
+            \subpart{Vue, Angular, Tailwind, Flutter}
+        \item Cloud \& Infrastructure
+            \subpart{Azure, Terraform, IaC}
+        \item CI/CD
+            \subpart{Github Actions, Azure DevOps}
+        \item Databases
+            \subpart{SQL Server, MySQL, Redis, ES}
+        \item Mobile Development
+            \subpart{Flutter, Dart}
+        \item Project Management
+            \subpart{Scrum, Git, Azure DevOps, Linear}
+        \item Technical Leadership
+            \subpart{Architecture, technical direction, mentoring, code reviews, hiring \& budget}
+        \item Languages
+            \subpart{C\#, TypeScript, PHP, Dart}
+    \end{itemize}
+\end{multicols}
+
+\newcommand{\p}[1]{\textbf{#1}\mbox{}\newline}
+\newcommand{\pj}[2]{\textbf{#1}~~\textit{\small #2}\mbox{}\newline}
+\newcommand{\skills}[1]{\par\vspace{.2em}{\scriptsize #1}\par\vspace{.5em}}
+\def\n{\\}
+\subsection*{Education}
+\secsep
+\vspace{-1em}
+\begin{longtabu} to \textwidth {>{\footnotesize\raggedright\arraybackslash}X[2,1]|X[27,1]}
+    Sep 2020 -- Jan 2023 & \p{Academy Profession in Computer Science, UCN}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Learned theory and practice behind software development including how larger systems are built and structured.
+        \item Worked with agile development methods (Scrum, Kanban, Extreme Programming) and plan-driven development (Unified Process).
+        \item Gained experience in GRASP, object-oriented languages (C\#, Java), ASP.NET (Razor pages, MVC, REST API).
+        \item Database development and optimization, frontend development (HTML, CSS, Vue).
+        \item AI/Computer Vision with PyTorch, and IT security fundamentals.
+    \end{itemize}
+    \vspace{-.1em}
+    \\
+    & \textbf{Grade:} A
+\end{longtabu}
+
+\subsection*{Work Experience}
+\secsep
+\vspace{-1em}
+\begin{longtabu} to \textwidth {>{\footnotesize\raggedright\arraybackslash}X[2,1]|X[27,1]}
+    Mar 2025 -- Present& \pj{Human Risks}{Technical Lead}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Reduced cloud infrastructure costs by 10\% by designing a server migration strategy (Windows to Linux) with targeted vendor contract and resource optimizations
+        \item Improved engineering velocity and bug-fix rate by introducing structured debugging tooling and development processes across a 5-person engineering team
+        \item Built the engineering function from the ground up, hiring 4 of 5 engineers in a 13-person company
+        \item Reduced technical debt by authoring migration plans and contributing code directly to critical systems
+        \item Ensured code quality and deployment reliability by implementing GitHub Actions pipelines covering tests, linting, and automated merge checks alongside deployment automation
+        \item Managed department technology budget and external vendor relationships, maintaining ISO~27001/9001 compliance across all technical processes
+    \end{itemize}
+    \skills{Azure, Angular, .NET, GitHub Actions, multi-tenant solutions, technical leadership}
+    \n
+
+    Aug 2023 -- Mar 2025& \pj{Solita A/S}{Software Engineer}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Reduced hosting costs by $\sim$28\% by migrating legacy IaaS workloads to Azure PaaS, improving application performance and developer experience
+        \item Reduced bug rate and improved UX responsiveness of a critical admin platform by modernizing it from Vue~2 to Vue~3 across 6 functional submodules for a large danish financial organization
+        \item Eliminated critical security vulnerabilities by migrating a legacy Laravel~7 application to Laravel~10 for a department within the danish government
+        \item Improved supply-chain security visibility by building an automated OSS dependency scanning pipeline; clients used structured PDF vulnerability reports, produced in consultation with the team, to prioritize remediation efforts
+        \item Accelerated infrastructure provisioning by implementing Infrastructure as Code with Terraform on Azure
+        \item Shortened deployment cycles by building and maintaining GitHub Actions CI/CD pipelines
+    \end{itemize}
+    \skills{C\#/.NET, Azure, Vue.js, Angular, TypeScript, Laravel, Terraform, GitHub Actions}
+    \n
+
+    Nov 2022 -- Aug 2023 & \pj{Homerunner}{Software Developer (Part-time)}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Improved logistics efficiency by designing and implementing route optimization algorithms within the microservice architecture
+        \item Maintained 3 production microservices and expanded platform capabilities through new feature development in Laravel and Flutter
+        \item Elevated code quality across the team by hosting an internal course on testable and scalable code architecture, including best practices for writing automated tests
+    \end{itemize}
+    \skills{Laravel, PHP, Flutter, Dart, microservices}
+    \n
+
+    Jun 2022 -- Nov 2022& \pj{Homerunner}{Developer (Full-time internship \& summer job)}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Reduced manual deployment overhead by automating DevOps processes
+        \item Enhanced data retrieval performance by integrating Elasticsearch into the microservice stack
+    \end{itemize}
+    \skills{Laravel, PHP, DevOps, Elasticsearch}
+    \n
+
+    Aug 2020 -- May 2022 & \pj{Graitor}{CTO \& Co-founder}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Scaled the platform to 30,000 registered users and 100+ vendor clients by architecting a secure, scalable infrastructure on Laravel
+        \item Led all technical strategy and managed the engineering team, overseeing architecture, code quality, and delivery
+    \end{itemize}
+    \skills{Laravel, PHP, technical leadership, architecture}
+    \n
+
+    Apr 2019 -- Aug 2020& \pj{Graitor}{Development Consultant}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Reduced product risk by delivering rapid prototypes that validated features and design direction before full development investment
+    \end{itemize}
+    \skills{Consulting, prototyping}
+    \n
+
+    Sep 2018 -- Mar 2022 & \pj{UngAalborg}{Teacher}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Taught programming, game development, and design to $\sim$40 students aged 13--20, covering C\#, Unity, UI/UX, level design, and time management
+    \end{itemize}
+    \skills{C\#, Unity, teaching}
+    \n
+
+    Sep 2018 -- Mar 2022& \pj{Freelance Developer}{Freelance}
+    \vspace{-1em}
+    \begin{itemize}[leftmargin=2em, topsep=-.5em, parsep=0em]
+        \item Delivered 6+ end-to-end software projects for SMEs, managing requirements, development, and client handover across game, app, and web domains
+    \end{itemize}
+    \skills{Full-stack development, client management}
+\end{longtabu}
+
+\subsection*{Certifications \& Achievements}
+\secsep
+\vspace{-1em}
+\begin{longtabu} to \textwidth {>{\footnotesize\raggedright\arraybackslash}X[2,1]|X[27,1]}
+    Jul 2024 -- Jul 2027 & \p{Microsoft Certified: Azure AI Engineer Associate}
+    Credential ID: D0AC5CE96626AC5
+    \n\n
+    May 2024 -- May 2027 & \p{Github Actions Certification}
+    Issued by GitHub
+    \n\n
+    May 2024 -- May 2027 & \p{Microsoft Certified: Azure Developer Associate}
+    Credential ID: 187C3739149F0808
+    \n\n
+    Aug 2023 & \p{Microsoft Certified: Azure Fundamentals}
+    Credential ID: 2FB54A50BC1264DE
+    \n\n
+    Aug 2018 & \p{Danish Champion in Game Development (Bonus Theme)}
+    Won the award for best incorporation of the theme ``Youth vs Global Warming'' at the Danish Championship in Game Development with the game ``Power The Evolution''.
+\end{longtabu}
+
+\subsection*{About me}
+\secsep
+\vspace{-0.0em}
+\setlength{\parskip}{1ex}
+In my spare time, I enjoy staying active through \textbf{bouldering}, \textbf{yoga}, and \textbf{sauna sessions}, all of which help me clear my mind and stay balanced both physically and mentally.
+It's a great way to approach problem-solving from a different angle.\par
+
+\noindent
+I'm passionate about exploring technology in my daily life through \textbf{home automation} projects and managing my \textbf{homelab setup}.
+I'm particularly interested in \textbf{NixOS} for its declarative configuration approach, which aligns perfectly with infrastructure-as-code principles.
+I also enjoy working on small \textbf{SaaS products} and hobby development projects, which help me stay current with new technologies and experiment with different ideas.\par
+
+\noindent
+These side projects and interests keep me engaged with the broader tech ecosystem and allow me to continuously learn and grow as a developer.
+\end{document}

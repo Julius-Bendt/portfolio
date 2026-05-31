@@ -1,3 +1,72 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", "Helvetica", "Arial", sans-serif;
+
+  --color-primary: #ffc107;
+  --color-body: #1f2022;
+  --color-bodyAccent: #242c3a;
+  --color-nav: #23304b;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-error: #ef4444;
+
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-slide-in: slideIn 0.5s ease-out;
+  --animate-bounce-slow: bounce 3s infinite;
+
+  --spacing-128: 32rem;
+  --spacing-144: 36rem;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 2rem;
+
+  --shadow-soft:
+    0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.prose-invert {
+  --tw-prose-body: #fff;
+  --tw-prose-headings: #fff;
+  --tw-prose-links: #ffc107;
+  --tw-prose-bold: #fff;
+  --tw-prose-counters: #9ca3af;
+  --tw-prose-bullets: #4b5563;
+  --tw-prose-hr: #374151;
+  --tw-prose-quotes: #9ca3af;
+  --tw-prose-quote-borders: #374151;
+  --tw-prose-captions: #9ca3af;
+  --tw-prose-code: #fff;
+  --tw-prose-pre-code: #fff;
+  --tw-prose-pre-bg: #1f2937;
+  --tw-prose-th-borders: #374151;
+  --tw-prose-td-borders: #374151;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   border: 4px solid white;
@@ -14,10 +83,4 @@
 }
 ::-webkit-scrollbar-track {
   background-color: #ecf0f1;
-}
-
-@font-face {
-  font-family: "Inter";
-  src: url("../../public/assets/font/Inter-Regular.ttf");
-  font-display: swap;
 }

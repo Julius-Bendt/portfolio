@@ -1,54 +1,71 @@
 ---
-import { parse } from 'node-html-parser';
+import { parse } from "node-html-parser";
 
 export interface Props {
-    icon: string;
-    fillColor: string;
-    svgClass?: string;
+  icon: string;
+  fillColor: string;
+  svgClass?: string;
 }
 
 async function getSVG(icon: string) {
-    const files = import.meta.glob('/public/assets/**/*.svg', {
-        eager: true,
-        query: '?raw',
-        import: 'default'
-    });
+  const files = import.meta.glob("/public/assets/**/*.svg", {
+    eager: true,
+    query: "?raw",
+    import: "default",
+  });
 
-    const filepath = `/public/assets/${icon}.svg`;
-    
-    if (!(filepath in files)) {
-        throw new Error(`${filepath} not found`);
-    }
+  const filepath = `/public/assets/${icon}.svg`;
 
-    const root = parse(files[filepath] as string);
-    const svg = root.querySelector('svg');
-    
-    if (!svg) {
-        throw new Error(`No SVG element found in ${filepath}`);
-    }
+  if (!(filepath in files)) {
+    throw new Error(`${filepath} not found`);
+  }
 
-    const { attributes, innerHTML } = svg;
+  const root = parse(files[filepath] as string);
+  const svg = root.querySelector("svg");
 
-    return {
-        attributes,
-        innerHTML,
-    };
+  if (!svg) {
+    throw new Error(`No SVG element found in ${filepath}`);
+  }
+
+  const { attributes, innerHTML } = svg;
+
+  return {
+    attributes,
+    innerHTML,
+  };
 }
 
-const { 
-    icon, 
-    fillColor,
-    svgClass = "icon h-auto w-2/5 mx-auto my-2 object-cover aspect-square group-hover:scale-125 transition duration-500 ease-in-out",
-    ...attributes 
+const {
+  icon,
+  fillColor,
+  svgClass = "icon h-auto w-2/5 mx-auto my-2 object-cover aspect-square group-hover:scale-125 transition duration-500 ease-in-out",
+  ...attributes
 } = Astro.props as Props;
 
-const { attributes: baseAttributes, innerHTML } = await getSVG(icon);
-const svgAttributes = { ...baseAttributes, ...attributes };
+let svgAttributes: Record<string, string> = {};
+let innerHTML = "";
+let failed = false;
+
+try {
+  const { attributes: baseAttributes, innerHTML: svgInnerHTML } =
+    await getSVG(icon);
+  svgAttributes = { ...baseAttributes, ...attributes };
+  innerHTML = svgInnerHTML;
+} catch (e) {
+  if (import.meta.env.DEV) {
+    console.warn(`SvgItem: Failed to load icon "${icon}":`, e);
+  }
+  failed = true;
+}
 ---
 
-<svg
-    class={svgClass}
-    {...svgAttributes}
-    set:html={innerHTML}
-    style={`fill:${fillColor}`}
-/>
+{
+  !failed && (
+    <svg
+      class={svgClass}
+      {...svgAttributes}
+      set:html={innerHTML}
+      style={`fill:${fillColor}`}
+    />
+  )
+}

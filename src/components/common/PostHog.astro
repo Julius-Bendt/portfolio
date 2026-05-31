@@ -1,0 +1,44 @@
+---
+const key = import.meta.env.PUBLIC_POSTHOG_KEY;
+const host = import.meta.env.PUBLIC_POSTHOG_HOST ?? "https://eu.i.posthog.com";
+
+if (!key) return;
+---
+
+<meta id="posthog-config" data-key={key} data-host={host} />
+
+<script>
+  const el = document.getElementById("posthog-config") as HTMLMetaElement | null;
+  const key = el?.dataset.key;
+  const host = el?.dataset.host;
+
+  if (key && navigator.doNotTrack !== "1") {
+    import("posthog-js").then(({ default: posthog }) => {
+      posthog.init(key, {
+        api_host: host,
+        persistence: "memory",
+        person_profiles: "never",
+        autocapture: false,
+        capture_pageview: false,
+        capture_pageleave: false,
+        disable_session_recording: true,
+        sanitize_properties: (properties) => {
+          if (properties["$current_url"]) {
+            const url = new URL(properties["$current_url"]);
+            ["email", "token", "key", "password", "secret"].forEach((p) =>
+              url.searchParams.delete(p),
+            );
+            properties["$current_url"] = url.toString();
+          }
+          delete properties["$browser_version"];
+          delete properties["$os_version"];
+          return properties;
+        },
+      });
+
+      document.addEventListener("astro:page-load", () => {
+        posthog.capture("$pageview");
+      });
+    });
+  }
+</script>

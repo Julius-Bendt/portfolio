@@ -1,168 +1,241 @@
 ---
-import Page from '../components/common/Page.astro';
-import { Image } from 'astro:assets';
-import {techstacks} from "../consts";
-import ConnectItem from '../components/common/ConnectItem.astro';
-import AnimateableText from '../components/common/AnimateableText.astro';
-import StackItem from '../components/home/StackItem.astro';
-import CubesBackground from '../components/common/CubesBackground.astro';
+import Page from "../components/common/Page.astro";
+import { Image } from "astro:assets";
+import { techstacks } from "../constants";
+import ConnectItem from "../components/common/ConnectItem.astro";
+import AnimateableText from "../components/common/AnimateableText.astro";
+import StackItem from "../components/home/StackItem.astro";
+import CubesBackground from "../components/common/CubesBackground.astro";
+import CollapsibleSection from "../components/common/CollapsibleSection.astro";
+import juliusImage from "../assets/julius.png";
 
-interface ITechstack {
-	name: string;
-	technologies: Array<any>;
+interface ITechnology {
+  name: string;
+  icon: string;
+  fillColor: string;
 }
 
-const techstack: ITechstack[] = Object.entries(techstacks).map(([name, technologies]) => ({
-	name,
-	technologies,
-}));
----
+interface ITechstack {
+  name: string;
+  technologies: ITechnology[];
+}
 
+const techstack: ITechstack[] = Object.entries(techstacks).map(
+  ([name, technologies]) => ({
+    name,
+    technologies,
+  })
+);
+
+---
 
 <CubesBackground />
 <Page
-    title="Home"
-    description="Julius Bendt - Fullstack developer, DevOps engineer, and home automation enthusiast. Explore my portfolio and technical expertise."
+  title="Home"
+  description="Julius Bendt - Fullstack developer, DevOps engineer, and home automation enthusiast. Explore my portfolio and technical expertise."
 >
-	<section 
-		id="intro" 
-		class="grid md:grid-cols-3 md:gap-12 grid-flow-row animate-fadeIn"
-		aria-label="Introduction"
-	>
-		<div class="relative mx-auto md:mx-0 w-3/4 md:w-full">
-			<Image
-				src="/assets/julius.jpg"
-				alt="Portrait of Julius Bendt"
-				width={500}
-				height={500}
-				class="rounded-2xl w-full h-auto transition-transform duration-300 hover:scale-105"
-			/>
-		</div>
-	
-		<div class="flex flex-col justify-center md:col-span-2">
-			<h1 class="text-5xl font-bold mx-auto md:mx-0 text-center md:text-left">
-				Hey there, I'm Julius H. Bendt!
-			</h1>
-			<AnimateableText />
-			
-			<div class="flex flex-row flex-wrap gap-4 mt-4 md:mt-2 mx-auto md:mx-0">
-				<p class="hidden md:block my-auto">Let's connect > </p>
-				<ConnectItem 
-					text="Github" 
-					icon="icons/github" 
-					fillColor="#ffffff" 
-					href="https://github.com/Julius-Bendt"
-				/>
-				<ConnectItem 
-					text="Linkedin" 
-					icon="icons/linkedin" 
-					fillColor="#0A66C2" 
-					href="https://www.linkedin.com/in/julius-bendt"
-				/>
-				<ConnectItem 
-					text="Leetcode" 
-					icon="icons/leetcode" 
-					fillColor="#FFA116" 
-					href="https://leetcode.com/Julius-Bendt"
-				/>
-				<ConnectItem 
-					class="hidden md:block" 
-					text="Itch.io" 
-					icon="icons/itchdotio" 
-					fillColor="#FA5C5C" 
-					href="https://bukz.itch.io"
-				/>
-			</div>
-		</div>
-	</section>
+  <section
+    id="intro"
+    class="grid md:grid-cols-3 md:gap-12 grid-flow-row animate-fadeIn parallax-image"
+    aria-label="Introduction"
+    data-speed="0.3"
+  >
+    <div class="relative mx-auto md:mx-0 w-3/4 md:w-full">
+      <Image
+        src={juliusImage}
+        alt="Portrait of Julius Bendt"
+        width={500}
+        height={500}
+        class="rounded-2xl w-full h-auto transition-transform duration-300 hover:scale-105"
+      />
+    </div>
 
-	<section 
-		id="description"
-		class="animate-fadeIn animation-delay-300"
-		aria-label="About me"
-	>
-		<h2 class="text-2xl font-bold mb-2">About me</h2>
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-			<p>
-				👋 Hello! I'm Julius Bendt, a fullstack developer who enjoys turning complex problems into elegant solutions. I bridge the gap between technical expertise and clear communication, making sure everyone - from developers to stakeholders - is on the same page.
-			</p>
-			<p>
-				💻 My technical journey covers everything from crafting robust backends with .NET and Laravel to building smooth user experiences with Vue and TypeScript. I enjoy working across the entire stack, including mobile development with Flutter and infrastructure management with Terraform.
-			</p>
-			<p>
-				⚡ When I'm not coding professionally, you'll find me exploring the intersection of technology and daily life through home automation projects, managing my homelab setup, or building SaaS products. I'm also an avid boulderer, proving that problem-solving isn't limited to the digital realm!
-			</p>
-			<p>
-				🔧 My tech adventures are driven by a simple philosophy: <b>great software is about creating solutions that make a real difference</b>, whether it's optimizing database queries with PostgreSQL or crafting seamless user experiences with Tailwind.
-			</p>
+    <div class="flex flex-col justify-center md:col-span-2">
+      <h1
+        class="text-5xl font-bold mx-auto md:mx-0 text-center mt-4 md:mt-0 md:text-left"
+      >
+        Hey there, I'm Julius Håland Bendt!
+      </h1>
+      <AnimateableText class="mt-4 md:mt-0" />
 
-		</div>
-	</section>
+      <div class="flex flex-row flex-wrap gap-4 mt-4 md:mt-2 mx-auto md:mx-0">
+        <p class="hidden md:block my-auto">Let's connect &gt;</p>
+        <ConnectItem
+          text="Github"
+          icon="icons/github"
+          fillColor="#ffffff"
+          href="https://github.com/Julius-Bendt"
+        />
+        <ConnectItem
+          text="Linkedin"
+          icon="icons/linkedin"
+          fillColor="#0A66C2"
+          href="https://www.linkedin.com/in/julius-bendt"
+        />
+        <ConnectItem
+          class="hidden md:block"
+          text="Leetcode"
+          icon="icons/leetcode"
+          fillColor="#FFA116"
+          href="https://leetcode.com/Julius-Bendt"
+        />
+      </div>
 
-	<section 
-		id="technologies"
-		class="animate-fadeIn animation-delay-600"
-		aria-label="Technologies"
-	>
-		<h2 class="text-2xl font-bold mb-2">Technologies I work with</h2>
-		<p class="mb-8 text-lg">
-			These are the technologies I have worked with on projects - some work related, other as a hobby. 
-		</p>
 
-		{techstack.map(({ name, technologies }) => (
-			<div class="mb-12">
-				<h3 class="text-xl font-semibold mb-4">{name}</h3>
-				<div class="grid md:grid-cols-6 grid-cols-2 md:gap-8 gap-4"> 
-					{technologies.map((tech) => (
-						<StackItem 
-							name={tech.name} 
-							icon={tech.icon} 
-							fillColor={tech.fillColor}
-						/>
-					))}
-				</div>
-			</div>
-		))}
+    </div>
+  </section>
 
-		<p class="text-gray-400 text-sm mt-8">
-			These awesome logos are provided by 
-			<a 
-				target="_blank" 
-				class="text-primary hover:underline" 
-				href="https://simpleicons.org/"
-			>
-				SimpleIcons
-			</a>.
-			<br>
-			All copyright and trademarks belong to their respective owners.
-		</p>
-	</section>
+  <section
+    id="description"
+    class="animate-fadeIn animation-delay-300"
+    aria-label="About me"
+  >
+    <h2 class="text-2xl font-bold mb-2">About me</h2>
+    <p class="mb-4">
+      I'm Julius, a fullstack developer and tech lead based in Aalborg -
+      half Danish, half Norwegian. I work primarily with Vue, Laravel, and
+      .NET, comfortable across the full stack from modern frontends to backend
+      APIs, databases, and Azure infrastructure. I like building well-structured
+      systems and helping teams write code they're actually proud of.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <p>
+        I've worked across different types of roles - consulting, co-founding,
+        and leading teams - and find the people side of technical leadership
+        just as interesting as the technical work. I care about code quality
+        and communicating technical decisions clearly to both developers and
+        non-technical stakeholders.
+      </p>
+      <p>
+        Outside of work, I stay active through bouldering, yoga, and sauna.
+        I'm always tinkering with home automation, running my homelab
+        (currently exploring NixOS for its declarative config approach), or
+        building small SaaS products - all of which keep me engaged with the
+        broader tech ecosystem.
+      </p>
+    </div>
+  </section>
+
+  <section
+    id="technologies"
+    class="animate-fadeIn animation-delay-600"
+    aria-label="Technologies"
+  >
+    <h2 class="text-2xl font-bold mb-2">Technologies I work with</h2>
+    <p class="mb-8 text-lg">
+      A mix of tools from my professional stack and things I explore in side
+      projects, homelab setups, and personal experiments.
+    </p>
+
+    {
+      techstack.map(({ name, technologies }) => (
+        <CollapsibleSection title={name}>
+          <div class="grid md:grid-cols-6 grid-cols-2 md:gap-8 gap-4">
+            {technologies.map((tech) => (
+              <StackItem
+                name={tech.name}
+                icon={tech.icon}
+                fillColor={tech.fillColor}
+              />
+            ))}
+          </div>
+        </CollapsibleSection>
+      ))
+    }
+
+    <p class="text-gray-400 text-sm mt-8">
+      These awesome logos are provided by
+      <a
+        target="_blank"
+        class="text-primary hover:underline"
+        href="https://simpleicons.org/"
+      >
+        SimpleIcons
+      </a>.
+      <br />
+      All copyright and trademarks belong to their respective owners.
+    </p>
+  </section>
 </Page>
 
 <style>
+  .animate-fadeIn {
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+  }
 
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
 
-.animate-fadeIn {
-	opacity: 0;
-	animation: fadeIn 1s ease-out forwards;
-}
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
 
-.animation-delay-300 {
-	animation-delay: 300ms;
-}
-
-.animation-delay-600 {
-	animation-delay: 600ms;
-}
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translateY(20px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>
+
+<script>
+  // Parallax effect for images
+  function initParallax() {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const parallaxElements = document.querySelectorAll(".parallax-image");
+    if (parallaxElements.length === 0) return;
+
+    let ticking = false;
+
+    function updateParallax() {
+      const scrollY = window.scrollY;
+
+      parallaxElements.forEach((element) => {
+        if (!(element instanceof HTMLElement)) return;
+
+        const speed = parseFloat(element.dataset.speed || "0.5");
+        const rect = element.getBoundingClientRect();
+        const elementTop = rect.top + scrollY;
+        const elementHeight = rect.height;
+
+        // Only apply parallax if element is in viewport or near it
+        if (
+          scrollY + window.innerHeight > elementTop - 200 &&
+          scrollY < elementTop + elementHeight + 200
+        ) {
+          const yPos = -(scrollY - elementTop) * speed;
+          element.style.transform = `translateY(${yPos}px)`;
+        }
+      });
+
+      ticking = false;
+    }
+
+    function requestTick() {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", requestTick, { passive: true });
+    updateParallax(); // Initial call
+  }
+
+  // Initialize on load
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initParallax);
+  } else {
+    initParallax();
+  }
+</script>

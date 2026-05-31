@@ -1,7 +1,6 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   site: "https://jub.dk",
@@ -13,7 +12,6 @@ export default defineConfig({
       priority: 0.7,
       lastmod: new Date(),
     }),
-    tailwind(),
   ],
   image: {
     service: { entrypoint: "astro/assets/services/sharp" },
@@ -23,9 +21,13 @@ export default defineConfig({
     minimumCacheTTL: 60 * 60 * 24 * 7,
     quality: 80,
   },
+  server: {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  },
   compressHTML: true,
   build: {
     inlineStylesheets: "auto",
   },
-  viewTransitions: true,
 });

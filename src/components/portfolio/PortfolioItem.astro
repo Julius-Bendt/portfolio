@@ -1,81 +1,122 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
+import { validateAltText } from "../../utils/imageValidation";
+import { getImageByPath } from "../../utils/imageUtils";
+import type { PortfolioItemProps } from "../../types/common";
+import TimelineItem from "../common/TimelineItem.astro";
 
-import type { PortfolioItemProps } from '../../types/common';
-export interface Props extends PortfolioItemProps {}
+export interface Props extends PortfolioItemProps {
+  shortDescription: string;
+  tags: string[];
+  index?: number;
+}
 
-const { name, description, href, image, status = 'completed' } = Astro.props;
+const { name, shortDescription, description, href, image, tags, index = Infinity } = Astro.props;
 
-const statusColors = {
-    'completed': 'bg-green-500',
-    'in-progress': 'bg-yellow-500',
-    'archived': 'bg-blue-500'
-};
-
-const statusText = {
-    'completed': 'Completed',
-    'in-progress': 'In Progress',
-    'archived': 'Archived / Finished'
-};
+const resolvedImage = getImageByPath(`portfolio/${image}`);
+const altText = validateAltText(`Screenshot or preview of ${name}`, image);
+const loadingStrategy = index < 3 ? "eager" : "lazy";
 ---
 
-<article 
-    class="bg-bodyAccent p-3 rounded-md flex flex-col gap-1 transform hover:-translate-y-1 transition-all duration-300 ease-in-out hover:shadow-lg"
-    itemscope 
-    itemtype="https://schema.org/Project"
+<TimelineItem
+  title={name}
+  shortDescription={shortDescription}
+  badges={tags}
+  open={index === 0}
+  itemtype="https://schema.org/Project"
 >
-    <div class="relative">
-        <Image 
-            src={`/assets/portfolio/${image}`}
-            alt={`Screenshot or preview of ${name}`}
-            width={800}
-            height={600}
-            class="rounded-md w-full h-[40vh] object-cover"
-            loading="lazy"
+  <div class="flex flex-col md:flex-row gap-4">
+    {
+      resolvedImage ? (
+        <div class="relative md:w-52 shrink-0 overflow-hidden rounded-md">
+          <div class="absolute inset-0 bg-gray-800 animate-pulse blur-sm image-placeholder z-[1]" />
+          <Image
+            src={resolvedImage}
+            alt={altText}
+            width={400}
+            height={300}
+            class="rounded-md w-full aspect-video object-contain bg-gray-900/50 portfolio-image"
+            loading={loadingStrategy}
+            decoding="async"
             itemprop="image"
-        />
-        <span 
-            class={`absolute top-2 right-2 px-2 py-1 rounded-full text-white text-sm ${statusColors[status]}`}
-        >
-            {statusText[status]}
-        </span>
-    </div>
-
-    <h2 
-        class="text-xl font-bold mt-2" 
-        itemprop="name"
-    >
-        {name}
-    </h2>
-
-    <p 
-        class="text-gray-300 flex-grow"
-        itemprop="description"
-        set:html={description}
-    />
-
-    {href && (
-        <a 
+          />
+        </div>
+      ) : (
+        <div class="md:w-52 shrink-0 bg-gray-800 aspect-video flex items-center justify-center rounded-md">
+          <span class="text-gray-400 text-sm">No image</span>
+        </div>
+      )
+    }
+    <div class="flex flex-col gap-2">
+      <p class="text-gray-300" itemprop="description" set:html={description} />
+      {
+        href && (
+          <a
             href={href}
-            class="text-primary mt-4 inline-flex items-center group hover:underline"
+            class="text-primary mt-2 inline-flex items-center group/link hover:underline transition-colors duration-200"
             target="_blank"
             rel="noopener noreferrer"
             itemprop="url"
-        >
+            data-project-link
+            data-project-name={name}
+          >
             View Project
-            <svg 
-                class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
+            <svg
+              class="w-4 h-4 ml-2 transform group-hover/link:translate-x-1 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-                <path 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round" 
-                    stroke-width="2" 
-                    d="M9 5l7 7-7 7"
-                />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
-        </a>
-    )}
-</article>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</TimelineItem>
+
+<script>
+  function initImagePlaceholders() {
+    const images = document.querySelectorAll(".portfolio-image");
+    images.forEach((img) => {
+      if (!(img instanceof HTMLImageElement)) return;
+      const placeholder = img.parentElement?.querySelector(".image-placeholder");
+      if (!placeholder) return;
+      if (img.complete) {
+        placeholder.classList.add("opacity-0");
+        setTimeout(() => placeholder.remove(), 300);
+      } else {
+        img.addEventListener("load", () => {
+          placeholder.classList.add("transition-opacity", "duration-300", "opacity-0");
+          setTimeout(() => placeholder.remove(), 300);
+        });
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initImagePlaceholders);
+  } else {
+    initImagePlaceholders();
+  }
+
+  document.addEventListener("astro:page-load", initImagePlaceholders);
+</script>
+
+<script>
+  import { capture } from "../../utils/analytics";
+
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLAnchorElement>("[data-project-link]").forEach((link) => {
+      if (link.dataset.tracked) return;
+      link.dataset.tracked = "true";
+      link.addEventListener("click", () => {
+        capture("project_link_click", {
+          project: link.dataset.projectName,
+          url: link.href,
+        });
+      });
+    });
+  });
+</script>
