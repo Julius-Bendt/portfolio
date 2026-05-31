@@ -24,14 +24,14 @@ jobs:
       - name: Build LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: en-redacted.tex
+          root_file: cv-redacted.tex
           working_directory: cv
           latexmk_use_xelatex: true
 
       - name: Copy PDF to public directory
         run: |
           mkdir -p public/assets/documents
-          cp cv/en-redacted.pdf public/assets/documents/cv.pdf
+          cp cv/cv-redacted.pdf public/assets/documents/cv.pdf
 
       - name: Check for changes
         id: git-check
