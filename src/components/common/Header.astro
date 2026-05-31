@@ -41,7 +41,7 @@ const navigationLinks = [
             ))
           }
           <MagneticButton
-            href="/assets/documents/cv.pdf"
+            href="/assets/documents/cv%20-%20Julius%20bendt.pdf"
             download={true}
             class="flex items-center px-4 py-2 bg-primary hover:bg-opacity-90 text-black font-semibold rounded-md transition-all"
             ariaLabel="Download CV as PDF"
@@ -74,7 +74,7 @@ const navigationLinks = [
           ))
         }
         <a
-          href="/assets/documents/cv.pdf"
+          href="/assets/documents/cv%20-%20Julius%20bendt.pdf"
           download
           class="flex items-center justify-center p-4 bg-primary hover:bg-opacity-90 text-black font-semibold rounded-md transition-all mt-2"
           aria-label="Download CV as PDF"
@@ -183,7 +183,7 @@ const navigationLinks = [
       toggleMenu();
     });
 
-    document.querySelectorAll<HTMLAnchorElement>('[href="/assets/documents/cv.pdf"]').forEach((link) => {
+    document.querySelectorAll<HTMLAnchorElement>('[href="/assets/documents/cv%20-%20Julius%20bendt.pdf"]').forEach((link) => {
       if (link.dataset.cvTracked) return;
       link.dataset.cvTracked = "true";
       link.addEventListener("click", () => capture("cv_download"));

@@ -69,6 +69,6 @@ python "$TEXLIVEONFLY" -c latexmk -a "-g -xelatex -synctex=1 -interaction=nonsto
 cd ..
 
 mkdir -p public/assets/documents
-cp cv/cv-redacted.pdf public/assets/documents/cv.pdf
+cp cv/cv-redacted.pdf "public/assets/documents/cv - Julius bendt.pdf"
 
 npm run build
