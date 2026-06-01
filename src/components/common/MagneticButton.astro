@@ -3,16 +3,18 @@ export interface Props {
   class?: string;
   href?: string;
   download?: boolean;
+  target?: string;
   ariaLabel?: string;
 }
 
-const { class: className = "", href, download, ariaLabel } = Astro.props;
+const { class: className = "", href, download, target, ariaLabel } = Astro.props;
 const Tag = href ? "a" : "button";
 ---
 
 <Tag
   href={href}
   download={download}
+  target={target}
   class={`magnetic-button ${className}`}
   aria-label={ariaLabel}
   data-magnetic
