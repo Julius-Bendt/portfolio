@@ -2,20 +2,171 @@
 import Page from "../components/common/Page.astro";
 ---
 
-<Page title="404 - Page Not Found">
-  <div
-    class="flex flex-col items-center justify-center min-h-[60vh] text-center"
-  >
-    <h1 class="text-6xl font-bold text-primary mb-4">404</h1>
-    <h2 class="text-2xl font-semibold mb-6">Page Not Found</h2>
-    <p class="text-gray-400 mb-8">
-      The page you're looking for doesn't exist or has been moved.
+<Page
+  title="404 - Page Not Found"
+  description="This page was not declared in the system configuration."
+>
+  <div class="flex flex-col items-center justify-center min-h-[60vh] px-4">
+    <div class="terminal-border w-full max-w-2xl">
+    <div class="terminal-window font-mono text-sm">
+      <div class="terminal-titlebar px-4 py-2 flex items-center justify-between">
+        <div class="flex items-center gap-2 text-gray-500 text-xs">
+          <span>🐱</span>
+          <span>kitty</span>
+        </div>
+        <span class="text-gray-400 text-xs">julius@homelab: ~/portfolio</span>
+        <div class="text-gray-600 text-xs">✕</div>
+      </div>
+
+      <div class="p-6 text-left space-y-1">
+        <p class="text-gray-300">
+          <span class="text-green-400">julius@homelab</span><span
+            class="text-gray-400">:</span
+          ><span class="text-blue-400">~/portfolio</span><span
+            class="text-gray-400">$</span
+          > nix build .#this-page
+        </p>
+        <p>&nbsp;</p>
+        <p class="text-red-400 font-bold">
+          error: attribute &apos;this-page&apos; missing
+        </p>
+        <p>&nbsp;</p>
+        <p class="text-gray-400">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at
+          /etc/nixos/portfolio.nix:<span class="text-primary">404</span>:1:
+        </p>
+        <p>&nbsp;</p>
+        <p class="text-gray-500">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          402| &nbsp;bouldering-grade = "still-working-on-V9";
+        </p>
+        <p class="text-gray-500">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          403| &nbsp;sauna-sessions = "weekly";
+        </p>
+        <p>
+          <span class="text-primary font-bold">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            404| &nbsp;this-page = ???;
+          </span>
+        </p>
+        <p class="text-gray-500">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          405| &nbsp;homelab-uptime = "mostly";
+        </p>
+        <p>&nbsp;</p>
+        <p class="text-yellow-400">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Did you mean one of: <span
+            class="text-white">&apos;home&apos;</span
+          >, <span class="text-white">&apos;blog&apos;</span>, <span
+            class="text-white">&apos;portfolio&apos;</span
+          >, <span class="text-white">&apos;cv&apos;</span>?
+        </p>
+        <p>&nbsp;</p>
+        <p class="text-gray-300">
+          <span class="text-green-400">julius@homelab</span><span
+            class="text-gray-400">:</span
+          ><span class="text-blue-400">~/portfolio</span><span
+            class="text-gray-400">$</span
+          >
+          <span class="cursor">▋</span>
+        </p>
+      </div>
+    </div>
+    </div>
+
+    <p class="text-foreground-secondary mt-6 text-center">
+      This page wasn&apos;t declared in the system configuration.
     </p>
-    <a
-      href="/"
-      class="bg-primary text-black px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-    >
-      Return Home
-    </a>
+    <p class="text-sm mt-1 text-center">
+      <span class="text-foreground-muted">I can&apos;t roll back to a version where it existed &mdash;</span>
+      <span class="text-foreground-muted italic">technically I can, I use git.</span>
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6 w-full max-w-2xl">
+      <a
+        href="/"
+        class="flex items-center justify-center bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+      >
+        Home
+      </a>
+      <a
+        href="/blog"
+        class="flex items-center justify-center border border-border text-foreground-secondary py-3 rounded-lg font-medium hover:border-primary hover:text-primary transition-colors"
+      >
+        Blog
+      </a>
+      <a
+        href="/portfolio"
+        class="flex items-center justify-center border border-border text-foreground-secondary py-3 rounded-lg font-medium hover:border-primary hover:text-primary transition-colors"
+      >
+        Portfolio
+      </a>
+      <a
+        href="/work-experience"
+        class="flex items-center justify-center border border-border text-foreground-secondary py-3 rounded-lg font-medium hover:border-primary hover:text-primary transition-colors"
+      >
+        Work Experience
+      </a>
+    </div>
   </div>
 </Page>
+
+<style>
+  @property --border-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  .terminal-border {
+    position: relative;
+    border-radius: 12px;
+    padding: 2px;
+    background: conic-gradient(
+      from var(--border-angle),
+      #ffc107 0%,
+      #ff6b6b 25%,
+      #a78bfa 50%,
+      #34d399 75%,
+      #ffc107 100%
+    );
+    animation: spin-border 6s linear infinite;
+    box-shadow:
+      0 0 32px rgba(255, 193, 7, 0.25),
+      0 0 64px rgba(167, 139, 250, 0.1);
+  }
+
+  @keyframes spin-border {
+    to {
+      --border-angle: 360deg;
+    }
+  }
+
+  .terminal-window {
+    border-radius: 10px;
+    background: #1e2535;
+    overflow: hidden;
+  }
+
+  .terminal-titlebar {
+    background: var(--color-nav);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .cursor {
+    display: inline-block;
+    animation: blink 1.2s step-start infinite;
+    color: var(--color-primary);
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+</style>

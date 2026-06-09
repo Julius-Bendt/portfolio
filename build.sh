@@ -63,7 +63,7 @@ fi
 
 export PATH="$TEXLIVE_BIN:$PATH"
 
-# Build CV — texliveonfly auto-installs any missing packages
+# Build CV, texliveonfly auto-installs any missing packages
 cd cv
 python "$TEXLIVEONFLY" -c latexmk -a "-g -xelatex -synctex=1 -interaction=nonstopmode" cv-redacted.tex
 cd ..

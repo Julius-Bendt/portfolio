@@ -2,20 +2,20 @@ export const workExperience = [
   {
     name: "Human Risks",
     shortDescription:
-      "Building multi-tenant security risk management solutions as Technical Lead with Azure, Angular, and .NET.",
+      "Technical Lead building multi-tenant security risk management tools with Azure, Angular, and .NET.",
     description:
-      "As Technical Lead, I'm responsible for the company's technical development, ensuring strong architecture, high code quality, and efficient development processes. I oversee technical leadership, ISO 27001/9001 compliance, architecture decisions, and coordinate between developers and stakeholders.<br><br>Working with Azure, Angular, and .NET to build multi-tenant solutions that help organizations manage and mitigate human-related security risks.",
+      "I lead the technical side of the company: architecture decisions, code quality, developer SOPs, and ISO 27001/9001 compliance. Together with the heads of product and CS and the CEO, I shape the technical roadmap and help translate business priorities into engineering direction. I manage a team of 5 developers, run scrum, handle the tech budget, and attend customer calls for onboarding, upsell, and retention.<br><br>On the engineering side, I contribute to the codebase directly alongside the team, built out CI/CD pipelines covering tests, linting, merge checks, and deployments, wrote technical debt migration plans, and investigated server and vendor changes that cut the cloud bill by ~10%. I also moved the team from Azure DevOps to Linear and set up automation flows that improved day-to-day flow for both the dev team and customer success.<br><br>The product is a multi-tenant GRC platform built on Azure, Angular, and .NET, covering risk assessments, incident reporting, business continuity, and crisis management. Used by enterprise clients like IKEA, HSBC, and Maersk.",
     href: "https://www.humanrisks.com/",
     startDate: new Date(2025, 2),
     endDate: undefined,
-    tags: ["Full-time", "Technical Lead", "Consultant"],
+    tags: ["Full-time", "Technical Lead"],
   },
   {
     name: "Solita DK",
     shortDescription:
-      "Delivered enterprise .NET and TypeScript solutions for finance and transportation clients using Azure and Terraform.",
+      "Software consultant at a digital services firm, building and migrating .NET, Vue, and Laravel solutions for clients in finance and the public sector.",
     description:
-      "As a Developer, I specialize in .NET, Node.js, and TypeScript, delivering solutions primarily within the finance and transportation sectors. My expertise includes cloud infrastructure management using Azure and implementing CI/CD through GitHub pipelines.<br><br>I have experience with Infrastructure as Code using Terraform and have successfully integrated AI technologies into enterprise solutions. Working with clients in finance, infrastructure, and logistics has given me strong experience in building robust, scalable systems for complex business needs.",
+      "Solita is a digital consulting firm working across finance, government, and manufacturing. I worked as a consultant, embedded in client teams and shipping production systems.<br><br>I modernized a Vue 2 admin platform to Vue 3 and built .NET backends for a Danish financial institution (6 submodules), migrated a legacy Laravel 7 app to Laravel 10 for a government client, and cut hosting costs ~28% by moving legacy IaaS workloads to Azure PaaS. I also helped integrate AI tooling into a couple of systems, set up IaC with Terraform, and maintained GitHub Actions pipelines across projects.",
     href: "https://www.solita.fi/denmark/",
     startDate: new Date(2023, 7),
     endDate: new Date(2025, 2),
@@ -24,9 +24,9 @@ export const workExperience = [
   {
     name: "Homerunner",
     shortDescription:
-      "Built Laravel microservices and Flutter mobile features for a B2B logistics delivery platform.",
+      "Built Laravel microservices and Flutter features for a multi-carrier logistics platform connecting 8,000+ businesses across Europe.",
     description:
-      "As a Developer at Homerunner, I worked with Laravel and Flutter to develop innovative solutions. My main focus was backend development, where I built and maintained microservices, implemented database models, and integrated APIs.<br><br>I also contributed to mobile app development using Flutter, creating user interfaces based on design specifications. Additionally, I gained experience with DevOps and Elasticsearch integration, working alongside an experienced team that fostered my technical growth.",
+      "Homerunner is a logistics platform connecting 8,000+ businesses across Europe to 80+ carriers, covering parcel shipping, B2B logistics, and container freight. I worked on the backend, building and maintaining Laravel microservices in the routing and carrier integration layer.<br><br>I designed route optimization algorithms, integrated Elasticsearch for better data retrieval, and built a searchable logging dashboard using Vue and Laravel. Also contributed to the Flutter mobile app, automated parts of the DevOps pipeline, and ran an internal course on testable and scalable code architecture.",
     href: "https://www.homerunner.com/",
     startDate: new Date(2022, 5),
     endDate: new Date(2023, 7),
@@ -35,9 +35,9 @@ export const workExperience = [
   {
     name: "Graitor",
     shortDescription:
-      "Co-developed app rewarding sustainable can-and-bottle collection with gamified points and redeemable perks.",
+      "Co-founded and led the technical side of an app rewarding sustainable can-and-bottle collection, scaling to 30k users.",
     description:
-      'Graitor is a startup with a mission to foster environmental sustainability globally. The core of Graitor\'s business model involves incentivizing conscientious user behavior, specifically through the act of "panting", or the collection and delivery of empty cans and bottles.<br><br>Users receive points for engaging in this activity, which can be subsequently redeemed for an array of rewards including discounts, unique experiences, and complimentary merchandise',
+      'Graitor is a startup built around incentivizing sustainable behavior, specifically "panting", collecting and returning empty cans and bottles. Users earn points for it, which they can redeem for discounts, experiences, and merch.<br><br>I joined early as a consultant before becoming CTO and co-founder. I led all technical strategy, managed the engineering team, and architected the platform that scaled to 30,000 registered users and 100+ vendor clients.',
     href: "https://graitor.dk",
     startDate: new Date(2019, 3),
     endDate: new Date(2022, 4),
@@ -46,9 +46,9 @@ export const workExperience = [
   {
     name: "Freelance developer",
     shortDescription:
-      "Developed games, websites, and apps for small businesses. No longer accepting freelance work.",
+      "Developed games, websites, and apps for small businesses. Not taking on new work.",
     description:
-      "As a seasoned freelancer, I have acquired ample experience in diverse areas of software development such as game, app, and website development.<br><br>My client base primarily comprised of small and mid-sized enterprises for whom I provided my services. My experience as a freelancer has endowed me with the necessary skills to tackle complex projects and deliver results within the designated timelines.<br><br><b>please notice: I don't do freelance work anymore</b>",
+      "I took on projects across game development, websites, and apps, mostly for small and mid-sized businesses. Good experience working directly with clients, managing timelines, and delivering on my own.<br><br><b>I'm not taking on freelance work anymore.</b>",
     href: null,
     startDate: new Date(2018, 8),
     endDate: new Date(2020, 7),
@@ -57,9 +57,9 @@ export const workExperience = [
   {
     name: "Game development teacher",
     shortDescription:
-      "Taught programming, design, and sound for game development to high school students at Gamelab Aalborg.",
+      "Taught game development to high school students at Gamelab Aalborg, covering programming, design, and sound.",
     description:
-      "Gamelab is a activity for young people in the municipality of Aalborg who are interested in game development. I have been a member of Gamelab since 2015 till 2022.<br><br>In 2018, I was hired to teach high school students about game development, specifically in areas such as programming, design, graphics, sound, and time management.",
+      "Gamelab is a youth activity in Aalborg for people interested in game development. I've been part of it since 2015. In 2018 I started teaching high school students there, covering programming, design, graphics, sound, and time management.",
     href: "https://aalborgungdomsskole.dk/gamelab/",
     startDate: new Date(2018, 8),
     endDate: new Date(2022, 2),

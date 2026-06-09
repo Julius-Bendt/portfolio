@@ -58,10 +58,10 @@ function getPostImage(heroImage: string | undefined) {
                   <h2 class="text-2xl font-bold mb-2 text-primary">
                     {post.data.title}
                   </h2>
-                  <div class="text-gray-400 mb-4">
+                  <div class="text-foreground-muted mb-4">
                     <time>{formatDayMonthYear(new Date(post.data.pubDate))}</time>
                   </div>
-                  <p class="text-gray-300">{post.data.description}</p>
+                  <p class="text-foreground-secondary">{post.data.description}</p>
                 </div>
               </a>
             </article>

@@ -46,6 +46,23 @@ const schemaOrg = generateSchemaOrg({
 const websiteSchema = type === "website" ? generateWebsiteSchema() : null;
 ---
 
+<!-- Theme init: runs before paint to avoid flash of wrong theme -->
+<script is:inline>
+  (function () {
+    function applyTheme() {
+      var stored = localStorage.getItem("theme");
+      var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (stored === "dark" || (!stored && prefersDark)) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    }
+    applyTheme();
+    document.addEventListener("astro:after-swap", applyTheme);
+  })();
+</script>
+
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />

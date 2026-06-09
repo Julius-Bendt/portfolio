@@ -23,12 +23,12 @@ const { title, shortDescription, dateRange, badges = [], open = false, itemtype 
       <div class="flex flex-col gap-1.5">
         <span class="text-lg font-bold leading-tight" itemprop="name">{title}</span>
         {shortDescription && (
-          <p class="text-sm text-gray-400 font-normal">{shortDescription}</p>
+          <p class="text-sm text-foreground-muted font-normal">{shortDescription}</p>
         )}
         {badges.length > 0 && (
           <div class="flex flex-wrap gap-1.5">
             {badges.map((badge) => (
-              <span class="bg-bodyAccent px-2 py-0.5 rounded text-xs text-gray-300">
+              <span class="bg-bodyAccent px-2 py-0.5 rounded text-xs text-foreground-secondary">
                 {badge}
               </span>
             ))}
@@ -37,10 +37,10 @@ const { title, shortDescription, dateRange, badges = [], open = false, itemtype 
       </div>
       <div class="flex items-center gap-2 shrink-0 mt-0.5">
         {dateRange && (
-          <span class="text-sm text-gray-400 whitespace-nowrap">{dateRange}</span>
+          <span class="text-sm text-foreground-muted whitespace-nowrap">{dateRange}</span>
         )}
         <svg
-          class="w-5 h-5 text-gray-400 group-open/item:rotate-180 transition-transform duration-300"
+          class="w-5 h-5 text-foreground-muted group-open/item:rotate-180 transition-transform duration-300"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -55,7 +55,7 @@ const { title, shortDescription, dateRange, badges = [], open = false, itemtype 
     </div>
   </details>
 </div>
-<hr class="timeline-hr border-gray-500 ml-8" />
+<hr class="timeline-hr border-border ml-8" />
 
 <style>
   details[open] .collapsible-content {

@@ -7,6 +7,7 @@ import AnimateableText from "../components/common/AnimateableText.astro";
 import StackItem from "../components/home/StackItem.astro";
 import CubesBackground from "../components/common/CubesBackground.astro";
 import CollapsibleSection from "../components/common/CollapsibleSection.astro";
+import ExternalLink from "../components/common/ExternalLink.astro";
 import juliusImage from "../assets/julius.png";
 
 interface ITechnology {
@@ -47,6 +48,8 @@ const techstack: ITechstack[] = Object.entries(techstacks).map(
         width={500}
         height={500}
         class="rounded-2xl w-full h-auto transition-transform duration-300 hover:scale-105"
+        fetchpriority="high"
+        loading="eager"
       />
     </div>
 
@@ -63,7 +66,7 @@ const techstack: ITechstack[] = Object.entries(techstacks).map(
         <ConnectItem
           text="Github"
           icon="icons/github"
-          fillColor="#ffffff"
+          fillColor="currentColor"
           href="https://github.com/Julius-Bendt"
         />
         <ConnectItem
@@ -130,7 +133,7 @@ const techstack: ITechstack[] = Object.entries(techstacks).map(
     {
       techstack.map(({ name, technologies }) => (
         <CollapsibleSection title={name}>
-          <div class="grid md:grid-cols-6 grid-cols-2 md:gap-8 gap-4">
+          <div class="grid md:grid-cols-5 grid-cols-2 md:gap-8 gap-4">
             {technologies.map((tech) => (
               <StackItem
                 name={tech.name}
@@ -143,15 +146,9 @@ const techstack: ITechstack[] = Object.entries(techstacks).map(
       ))
     }
 
-    <p class="text-gray-400 text-sm mt-8">
+    <p class="text-foreground-muted text-sm mt-8">
       These awesome logos are provided by
-      <a
-        target="_blank"
-        class="text-primary hover:underline"
-        href="https://simpleicons.org/"
-      >
-        SimpleIcons
-      </a>.
+      <ExternalLink href="https://simpleicons.org/">SimpleIcons</ExternalLink>.
       <br />
       All copyright and trademarks belong to their respective owners.
     </p>

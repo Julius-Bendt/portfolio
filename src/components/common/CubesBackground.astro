@@ -21,6 +21,22 @@
 <script>
   import { ANIMATION } from "../../constants/site";
 
+  // Cached layout values, read outside the rAF loop to avoid forced reflows.
+  // Reading document.documentElement.scrollHeight after a DOM write (setAttribute)
+  // forces a synchronous layout recalculation. Caching here and updating on resize
+  // means the rAF loop can stay write-only.
+  let viewportWidth = window.innerWidth;
+  let viewportHeight = window.innerHeight;
+
+  window.addEventListener(
+    "resize",
+    () => {
+      viewportWidth = window.innerWidth;
+      viewportHeight = window.innerHeight;
+    },
+    { passive: true }
+  );
+
   class Shape {
     element: SVGElement;
     x: number;
@@ -54,14 +70,12 @@
       this.element = this.createShape();
       svg.appendChild(this.element);
 
-      // Initial position
-      this.x = Math.random() * window.innerWidth;
+      // Initial position, use cached values (not live DOM reads)
+      this.x = Math.random() * viewportWidth;
       if (startAtBottom) {
-        // Start new shapes at the bottom
-        this.y = window.innerHeight + this.size;
+        this.y = viewportHeight + this.size;
       } else {
-        // Initial distribution for startup
-        const section = window.innerHeight / 5;
+        const section = viewportHeight / 5;
         this.y = index * section + Math.random() * section;
       }
 
@@ -81,7 +95,7 @@
       this.element.style.opacity = this.opacity.toString();
       this.element.style.transition = "opacity 1s ease-in-out";
 
-      this.update(0);
+      this.update(0, 1, false);
     }
 
     createShape(): SVGElement {
@@ -111,7 +125,6 @@
         "http://www.w3.org/2000/svg",
         "polygon"
       );
-      // Create a 5-pointed star
       const points: string[] = [];
       const outerRadius = this.size / 2;
       const innerRadius = outerRadius * 0.4;
@@ -137,33 +150,36 @@
       );
       const height = this.size;
       const width = this.size;
-      // Equilateral triangle
       const points = `${width / 2},0 ${width},${height} 0,${height}`;
       triangle.setAttribute("points", points);
       return triangle;
     }
 
     reset() {
-      // Start fade out
       this.isResetting = true;
       this.element.style.opacity = "0";
 
-      // After fade out, reset position
       setTimeout(() => {
-        this.y = window.innerHeight + this.size;
-        this.x = Math.random() * window.innerWidth;
+        // Use cached values, avoids a forced reflow inside the timeout
+        this.y = viewportHeight + this.size;
+        this.x = Math.random() * viewportWidth;
         this.originalY = this.y;
         this.isResetting = false;
 
-        // Fade back in after position reset
         setTimeout(() => {
           this.element.style.opacity = this.opacity.toString();
         }, 100);
       }, ANIMATION.cubesBackground.fadeOutDuration);
     }
 
-    update(scrollY: number) {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    // docScrollHeight and prefersReducedMotion are passed in so this method
+    // never reads layout properties, all reads happen before the loop in animate().
+    update(
+      scrollY: number,
+      docScrollHeight: number,
+      prefersReducedMotion: boolean
+    ) {
+      if (prefersReducedMotion) {
         this.element.setAttribute(
           "transform",
           `translate(${this.x} ${this.y})`
@@ -173,11 +189,9 @@
 
       if (this.isResetting) return;
 
-      // Very slow upward movement
       this.y -= this.moveSpeed;
       this.rotation += this.rotationSpeed;
 
-      // Start reset when shape is near the top
       if (
         this.y + this.size < ANIMATION.cubesBackground.resetTopThreshold &&
         !this.isResetting
@@ -186,8 +200,10 @@
         return;
       }
 
+      // Use pre-read docScrollHeight and cached viewportHeight
+      const scrollableHeight = docScrollHeight - viewportHeight;
       const scrollProgress =
-        scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+        scrollableHeight > 0 ? scrollY / scrollableHeight : 0;
       const parallaxY = scrollY * ANIMATION.cubesBackground.parallaxSpeed;
       const scrollEffect = Math.sin(scrollProgress * Math.PI * 2) * 20;
 
@@ -197,10 +213,7 @@
 
       this.element.setAttribute(
         "transform",
-        `
-            translate(${finalX} ${finalY}) 
-            rotate(${this.rotation} ${this.size / 2} ${this.size / 2})
-        `
+        `translate(${finalX} ${finalY}) rotate(${this.rotation} ${this.size / 2} ${this.size / 2})`
       );
     }
   }
@@ -216,7 +229,7 @@
       return;
     }
 
-    // Check for reduced motion preference and disable animations
+    // Cache prefersReducedMotion once, avoids repeated MediaQueryList allocations
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -232,7 +245,6 @@
     let isRunning = true;
     let isVisible = true;
 
-    // Intersection Observer to pause animations when not visible
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -254,7 +266,12 @@
 
     function animate() {
       if (!isRunning || !isVisible || prefersReducedMotion) return;
-      shapes.forEach((shape) => shape.update(lastScrollY));
+      // Read scrollHeight ONCE before the loop so no shape.update() call triggers
+      // a forced reflow by reading layout after a sibling's DOM write.
+      const docScrollHeight = document.documentElement.scrollHeight;
+      shapes.forEach((shape) =>
+        shape.update(lastScrollY, docScrollHeight, prefersReducedMotion)
+      );
       animationFrameId = requestAnimationFrame(animate);
     }
 
@@ -262,7 +279,10 @@
       lastScrollY = window.scrollY;
       if (!ticking && !prefersReducedMotion) {
         window.requestAnimationFrame(() => {
-          shapes.forEach((shape) => shape.update(lastScrollY));
+          const docScrollHeight = document.documentElement.scrollHeight;
+          shapes.forEach((shape) =>
+            shape.update(lastScrollY, docScrollHeight, prefersReducedMotion)
+          );
           ticking = false;
         });
         ticking = true;
@@ -271,7 +291,6 @@
 
     window.addEventListener("scroll", scrollHandler, { passive: true });
 
-    // Cleanup function
     const cleanup = () => {
       isRunning = false;
       if (animationFrameId) {
@@ -281,19 +300,14 @@
       observer.disconnect();
     };
 
-    // Listen for Astro page transitions to cleanup
     document.addEventListener("astro:before-swap", cleanup);
-
-    // Cleanup on page unload
     window.addEventListener("beforeunload", cleanup);
 
-    // Only start animation if not reduced motion and visible
     if (!prefersReducedMotion) {
       animate();
     }
   }
 
-  // Run initialization when the document is ready
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initBackground);
   } else {

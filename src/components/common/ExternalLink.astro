@@ -1,0 +1,30 @@
+---
+import SvgItem from "./SvgItem.astro";
+
+interface Props {
+  href: string;
+  target?: string;
+  rel?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  href,
+  target = "_blank",
+  rel = "noopener noreferrer",
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<a
+  href={href}
+  target={target}
+  rel={rel}
+  class:list={["text-primary underline inline-flex items-center gap-1", className]}
+  {...rest}
+>
+  <slot />
+  <SvgItem icon="icons/external-link" fillColor="none" svgClass="w-3 h-3 shrink-0" />
+</a>

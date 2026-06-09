@@ -1,6 +1,7 @@
 ---
 import { formatMonthYear } from "../../utils/formatDate";
 import TimelineItem from "../common/TimelineItem.astro";
+import ExternalLink from "../common/ExternalLink.astro";
 
 export interface Props {
   name: string;
@@ -26,28 +27,18 @@ const dateRange = `${formatMonthYear(startDate)} – ${endDate ? formatMonthYear
   open={index === 0}
   itemtype="https://schema.org/OrganizationRole"
 >
-  <p class="text-gray-300" itemprop="description" set:html={description} />
+  <p class="text-foreground-secondary" itemprop="description" set:html={description} />
   {
     href && (
-      <a
+      <ExternalLink
         href={href}
-        class="text-primary mt-4 inline-flex items-center group/link hover:underline transition-colors duration-200"
-        target="_blank"
-        rel="noopener noreferrer"
+        class="mt-4"
         itemprop="url"
         data-workplace-link
         data-company-name={name}
       >
         Open workplace website
-        <svg
-          class="w-4 h-4 ml-2 transform group-hover/link:translate-x-1 transition-transform duration-300"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </a>
+      </ExternalLink>
     )
   }
 </TimelineItem>
